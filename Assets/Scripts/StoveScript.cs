@@ -1,56 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StoveScript : MonoBehaviour
 {
     [SerializeField] Player player;
-    public Queue<int> burgerQueue = new Queue<int>();
-    [SerializeField] GameObject burgerStack;
-    [SerializeField] GameObject[] burgers;
-    int maxStoveBurger = 4;
+    public enum StoveType { Donut, Cake }
+    public StoveType stoveType;
+
+    //public Queue<int> burgerQueue = new Queue<int>(); // 굳이 큐를 써야하는가......?????????
+    public int stoveDesserts;
+    [SerializeField] GameObject stoveStack;
+    [SerializeField] GameObject[] stoveImg;
+    int maxStove = 4;
     void Start()
     {
         StartCoroutine("MakeBurger");
     }
     private void LateUpdate()
     {
-        burgerStack.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 3f, 0));
+        stoveStack.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 3f, 0));
         BurgerUi();
     }
     IEnumerator MakeBurger()
     {
         while (true)
         {
-            yield return new WaitForSeconds(3f);
-            int burger = burgerQueue.Count + 1;
-            AddQueue(burger);
+            yield return new WaitForSecondsRealtime(3f);
+            if (stoveDesserts < maxStove)
+            {
+                stoveDesserts++;
+                stoveImg[stoveDesserts - 1].SetActive(true);
+                //AddQueue(burger);
+            }
         }
     }
-    void AddQueue(int burger)
-    {
-        if (burgerQueue.Count < maxStoveBurger) burgerQueue.Enqueue(burger);
-        burgers[burgerQueue.Count-1].SetActive(true);
-    }
+    //void AddQueue(int burger)
+    //{
+    //    if (burgerQueue.Count < maxStoveBurger) burgerQueue.Enqueue(burger);
+    //    burgers[burgerQueue.Count-1].SetActive(true);
+    //}
     void BurgerUi()
     {
-        if (burgerQueue.Count > 0)
+        if (stoveDesserts > 0)
         {
-            burgerStack.SetActive(true);
+            stoveStack.SetActive(true);
         }
-        else if (burgerQueue.Count <= 0) burgerStack.SetActive(false);
+        else if (stoveDesserts <= 0) stoveStack.SetActive(false);
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            for(int  i = 0; i< maxStoveBurger; i++)
+            for(int  i = 0; i< maxStove; i++)
             {
-                if (i < burgerQueue.Count)
+                if (i < stoveDesserts)
                 {
-                    burgers[i].SetActive(true);
-                }else burgers[i].SetActive(false);
+                    stoveImg[i].SetActive(true);
+                }else stoveImg[i].SetActive(false);
             }
         }
     }
