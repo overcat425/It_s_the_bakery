@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class StoveScript : MonoBehaviour
 {
-    [SerializeField] Player player;
+    UpgradeScript upgradeScript;
     public enum StoveType { Donut, Cake }
     public StoveType stoveType;
 
@@ -15,6 +15,7 @@ public class StoveScript : MonoBehaviour
     [SerializeField] GameObject stoveStack;
     [SerializeField] GameObject[] stoveImg;
     int maxStove = 4;
+    int speed;
     void Start()
     {
         StartCoroutine("MakeBurger");
@@ -28,7 +29,8 @@ public class StoveScript : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSecondsRealtime(3f);
+            speed = GameManager.instance.upgradeScript.bakeSpeed;
+            yield return new WaitForSecondsRealtime(speed);
             if (stoveDesserts < maxStove)
             {
                 stoveDesserts++;

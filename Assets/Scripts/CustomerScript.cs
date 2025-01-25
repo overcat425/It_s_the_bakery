@@ -11,11 +11,12 @@ public class CustomerScript : MonoBehaviour
     public Transform homeTrans;
     public bool isMoving;
     public bool isRequesting;   // 손님이 도착해서 주문하기도 전에 갖다주는 케이스 방지
+    public int[] requires; // 0은 도넛요구량, 1은 케이크요구량
 
     private NavMeshAgent navMesh;
     Rigidbody rigid;
     public Animator anim;
-    public int[] requires; // 0은 도넛요구량, 1은 케이크요구량
+
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
@@ -41,10 +42,17 @@ public class CustomerScript : MonoBehaviour
         isMoving = navMesh.remainingDistance <= 0.05f ? false : true;
         anim.SetBool("isWalk", isMoving);
     }
-    void InitRequire()
+    void InitRequire()     // 상품 요구량 메소드 ; 0~3인데 둘다 0이면 리롤
     {
         isRequesting = false;
-        requires = requires.Select(x => Random.Range(1, 4)).ToArray();
+        if (GameManager.instance.upgradeScript.stoveLevel < 3)
+        {
+            requires[0] = Random.Range(1, 4);
+        }
+        else if (GameManager.instance.upgradeScript.stoveLevel >= 3)
+        {
+            requires = requires.Select(x => Random.Range(1, 4)).ToArray();
+        }
         if (requires[0] == 0 && requires[1]==0) InitRequire();
     }
 }

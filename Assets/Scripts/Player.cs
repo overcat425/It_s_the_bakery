@@ -10,16 +10,15 @@ public class Player : MonoBehaviour
     [SerializeField] float speed;
     float hor;
     float ver;
-    bool runKey;
+    //bool runKey;
+    bool isCarrying;
     Vector3 moveVec;
     Animator anim;
 
     //public Queue<int> playerQueue = new Queue<int>(); // 생각해보니까 굳이 큐로 써야되는가...??????????
     public int[] playerDesserts = { 0, 0 };  // 0이 Donut, 1이 Cake
-    [SerializeField] GameObject[] playerInven;
-    [SerializeField] GameObject playerUi;
-    [SerializeField] GameObject[] donutsImg;
-    [SerializeField] GameObject[] cakeImg;
+    [SerializeField] GameObject[] donutsPrefab;
+    [SerializeField] GameObject[] cakePrefab;
     public int maxPlayerDesserts = 5;
     void Start()
     {
@@ -34,7 +33,6 @@ public class Player : MonoBehaviour
     }
     private void LateUpdate()
     {
-        playerUi.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 3f, 0));
         DessertsUi();
     }
     IEnumerator PlayerDesserts()
@@ -48,16 +46,28 @@ public class Player : MonoBehaviour
     {
         hor = Input.GetAxisRaw("Horizontal");
         ver = Input.GetAxisRaw("Vertical");
-        runKey = Input.GetButton("Run");
+        //runKey = Input.GetButton("Run");
         //jumpKey = Input.GetButtonDown("Jump");
     }
     void Move()
     {
         moveVec = new Vector3(hor, 0, ver).normalized;
-        transform.position += moveVec * speed * Time.deltaTime * (runKey?1.5f:1f);
-        anim.SetBool("isWalk", moveVec != Vector3.zero);
-        if(moveVec != Vector3.zero)anim.SetBool("isRun", runKey);
-        if (moveVec == Vector3.zero) anim.SetBool("isRun", false);
+        transform.position += moveVec * speed * Time.deltaTime;
+        //anim.SetBool("isWalk", moveVec != Vector3.zero);
+        isCarrying = playerDesserts[0] == 0 && playerDesserts[1]==0 ? false : true;
+        //anim.SetBool("isCarry", isCarrying);
+        if (!isCarrying)
+        {
+            anim.SetBool("isCarry", false); anim.SetBool("isCarryMove", false);
+            anim.SetBool("isWalk", moveVec != Vector3.zero);
+        }
+        else if (isCarrying)
+        {
+            anim.SetBool("isCarry", moveVec == Vector3.zero);
+            anim.SetBool("isCarryMove", moveVec != Vector3.zero);
+        }
+        //if (moveVec != Vector3.zero)anim.SetBool("isRun", runKey);
+        //if (moveVec == Vector3.zero) anim.SetBool("isRun", false);
         transform.LookAt(moveVec+transform.position);
     }
     private void OnCollisionEnter(Collision collision)
@@ -91,62 +101,68 @@ public class Player : MonoBehaviour
             case "Trash":
                 for (int i = 0; i < maxPlayerDesserts; i++)
                 {
-                    donutsImg[i].SetActive(false);
-                    cakeImg[i].SetActive(false);
+                    donutsPrefab[i].SetActive(false);
+                    cakePrefab[i].SetActive(false);
                     if (i < 2) playerDesserts[i] = 0;
-                }
-                break;
-            case "Counter":
-                if (GameManager.instance.customerObjects.Count <= 0) return;
-                CustomerScript customerScript = GameManager.instance.customerObjects[0].GetComponent<CustomerScript>();
-                for (int i = 0; i < playerDesserts.Length; i++)
-                {
-                    int req = customerScript.requires[i];
-                    if (req == 0 || customerScript.isRequesting == false) continue;
-                    while (playerDesserts[i] > 0)
-                    {
-                        switch (i)
-                        {
-                            case 0:
-                                donutsImg[playerDesserts[i] - 1].SetActive(false);
-                                GameManager.instance.GetMoney(GameManager.instance.donutCost);
-                                break;
-                            case 1:
-                                cakeImg[playerDesserts[i] - 1].SetActive(false);
-                                GameManager.instance.GetMoney(GameManager.instance.cakeCost);
-                                break;
-                        }
-                        playerDesserts[i]--;
-                        req--;
-                        if (req <= 0) break;
-                    }
-                    customerScript.requires[i] = req;
                 }
                 break;
         }
     }
+    private void OnTriggerStay(Collider other)
+    {
+        if (GameManager.instance.customerObjects.Count <= 0) return;
+        if (other.gameObject.CompareTag("Counter")){
+            CustomerScript customerScript = GameManager.instance.customerObjects[0].GetComponent<CustomerScript>();
+            for (int i = 0; i < playerDesserts.Length; i++)
+            {
+                int req = customerScript.requires[i];
+                if (req == 0 || customerScript.isRequesting == false) continue;
+                while (playerDesserts[i] > 0)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            donutsPrefab[playerDesserts[i] - 1].SetActive(false);
+                            GameManager.instance.GetMoney(GameManager.instance.donutCost);
+                            break;
+                        case 1:
+                            cakePrefab[playerDesserts[i] - 1].SetActive(false);
+                            GameManager.instance.GetMoney(GameManager.instance.cakeCost);
+                            break;
+                    }
+                    playerDesserts[i]--;
+                    req--;
+                    if (req <= 0) break;
+                }
+                customerScript.requires[i] = req;
+                GameManager.instance.upgradeScript.DisableBtn();
+            }
+        }
+    }
     void DessertsUi()
     {
-        for(int i = 0; i < playerInven.Length; i++)
+        for(int i = 0; i < playerDesserts.Length; i++)
         {
-            if (playerDesserts[i] > 0)
-            {
-                playerInven[i].SetActive(true);
-            }
-            else if (playerDesserts[i] <= 0) playerInven[i].SetActive(false);
-
             for (int j = 0; j < playerDesserts[i]; j++)
             {
                 switch (i)
                 {
                     case 0:
-                        donutsImg[j].SetActive(true);
+                        donutsPrefab[j].SetActive(true);
                     break;
                         case 1:
-                        cakeImg[j].SetActive(true);
+                        cakePrefab[j].SetActive(true);
                     break;
                 }
             }
         }
+    }
+    void IsCarrying()
+    {
+        for(int i = 0; i < playerDesserts.Length; i++)
+        {
+            if (playerDesserts[i] > 0) isCarrying = true;
+        }
+        if (playerDesserts[0] == 0 && playerDesserts[1]==0) isCarrying= false;
     }
 }

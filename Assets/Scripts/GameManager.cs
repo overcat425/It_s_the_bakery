@@ -6,10 +6,13 @@ using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("인스턴스")]
     public static GameManager instance;
+    public UpgradeScript upgradeScript;
     public CustomerScript customerScript;
     public CustomersPool customersPool;
     public CounterScript counterScript;
+    public CameraManager cameraManager;
     public Player player;
 
     [SerializeField] ItemData[] itemData;
@@ -17,7 +20,10 @@ public class GameManager : MonoBehaviour
     public int money;
     public int donutCost;
     public int cakeCost;
-    
+
+    [Header("일시정지 UI")]
+    [SerializeField] GameObject pauseUi;
+
 
     [SerializeField] Transform spawnPoint;
     public List<Transform> counters = new List<Transform>();
@@ -36,6 +42,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         StartCoroutine("CustomersComing");
+        money = 20000;
     }
     public void Destination(GameObject cust, Transform dest)
     {                                       // 손님들 목적지 설정
@@ -66,7 +73,7 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            float rand = Random.Range(3, 9);        // 3~8초 랜덤쿨타임
+            float rand = Random.Range(3, 7);        // 3~6초 랜덤쿨타임
             yield return new WaitForSeconds(rand);
             if(customerObjects.Count < 8)
             {
@@ -80,7 +87,7 @@ public class GameManager : MonoBehaviour
     public void GetMoney(int cost)      // 손님 계산도와드리겠읍니다
     {
         money += cost;
-        moneyText.text = string.Format("{0}", money);
+        MoneySync();
     }
     void Costing()      // 소지금 + 상품별 금액 초기화
     {
@@ -97,5 +104,14 @@ public class GameManager : MonoBehaviour
                     break;
             }
         }
+    }
+    public void MoneySync()
+    {
+        moneyText.text = string.Format("{0}", money);
+    }
+    public void PauseUiToggle()
+    {
+        if (pauseUi.activeSelf) { pauseUi.SetActive(false);
+        }else if (pauseUi.activeSelf==false) pauseUi.SetActive(true);
     }
 }

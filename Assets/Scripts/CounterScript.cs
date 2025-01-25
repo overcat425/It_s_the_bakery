@@ -12,14 +12,6 @@ public class CounterScript : MonoBehaviour
     {
         if(GameManager.instance.customerObjects.Count >= 1)IsFirstObject();
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.tag == "Player")
-        {
-            //RefreshRequires();
-            //StartCoroutine("CounterReady");
-        }
-    }
     void IsFirstObject()        // 차례 된 손님의 상품 요구량 전시
     {
         GameObject yourTurn = GameManager.instance.customerObjects[0];
@@ -40,18 +32,5 @@ public class CounterScript : MonoBehaviour
             }
         }
         else requireInven.SetActive(false);
-    }
-    //public void RefreshRequires()
-    //{
-    //    for (int i = 0; i < 5; i++)
-    //    {
-    //        donutImg[i].SetActive(false);
-    //    }
-    //}
-    IEnumerator CounterReady()
-    {
-        gameObject.tag = "Untagged";
-        yield return new WaitForSeconds(0.5f);
-        gameObject.tag = "Counter";
     }
 }
