@@ -22,10 +22,10 @@ public class CustomerScript : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         navMesh = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
-        isMoving = true;
     }
     private void OnEnable()
     {
+        isMoving = true;
         InitRequire();
     }
     void Update()
@@ -34,6 +34,14 @@ public class CustomerScript : MonoBehaviour
         if (requires[0] <= 0 && requires[1]<=0)
         {
             GameManager.instance.ShiftObjectsForward();
+            requires[0]++; // 둘다 00인 상태면 리스트에 있는걸 싹다 빼버림
+            GameManager.instance.Destination(gameObject, GameManager.instance.destroyPoint);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Destroy"))
+        {
             gameObject.SetActive(false);
         }
     }

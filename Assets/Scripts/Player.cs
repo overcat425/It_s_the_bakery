@@ -7,12 +7,13 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     Rigidbody rigid;
-    [SerializeField] float speed;
     float hor;
     float ver;
+    public float speed;
     //bool runKey;
     bool isCarrying;
     Vector3 moveVec;
+    float camY;
     Animator anim;
 
     //public Queue<int> playerQueue = new Queue<int>(); // 생각해보니까 굳이 큐로 써야되는가...??????????
@@ -51,17 +52,17 @@ public class Player : MonoBehaviour
     }
     void Move()
     {
-        moveVec = new Vector3(hor, 0, ver).normalized;
+        camY = Camera.main.transform.eulerAngles.y;     // 카메라 -45 회전에 대한 해결책
+        Quaternion camRot = Quaternion.Euler(0f, camY, 0f);     // 카메라의 Y축만 받은 뒤,
+        speed = (2 + GameManager.instance.upgradeScript.moveSpeed * 0.3f);
+        moveVec = camRot *  new Vector3(hor, 0, ver).normalized;            // 플레이어의 이동값에 곱해줌
         transform.position += moveVec * speed * Time.deltaTime;
-        //anim.SetBool("isWalk", moveVec != Vector3.zero);
         isCarrying = playerDesserts[0] == 0 && playerDesserts[1]==0 ? false : true;
-        //anim.SetBool("isCarry", isCarrying);
         if (!isCarrying)
         {
             anim.SetBool("isCarry", false); anim.SetBool("isCarryMove", false);
             anim.SetBool("isWalk", moveVec != Vector3.zero);
-        }
-        else if (isCarrying)
+        }else if (isCarrying)
         {
             anim.SetBool("isCarry", moveVec == Vector3.zero);
             anim.SetBool("isCarryMove", moveVec != Vector3.zero);

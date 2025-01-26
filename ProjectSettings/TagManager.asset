@@ -11,6 +11,7 @@ TagManager:
   - CustomerBack
   - CakeStove
   - Upgrade
+  - Destroy
   layers:
   - Default
   - TransparentFX

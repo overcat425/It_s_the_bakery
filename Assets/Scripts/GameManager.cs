@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour
     [Header("일시정지 UI")]
     [SerializeField] GameObject pauseUi;
 
-
     [SerializeField] Transform spawnPoint;
+    public Transform destroyPoint;
     public List<Transform> counters = new List<Transform>();
     public List <GameObject> customerObjects = new List <GameObject>();
     private void Awake()        // 싱글톤
@@ -42,7 +42,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         StartCoroutine("CustomersComing");
-        money = 20000;
     }
     public void Destination(GameObject cust, Transform dest)
     {                                       // 손님들 목적지 설정
@@ -58,7 +57,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject firstObject = customerObjects[0];
             customerObjects.RemoveAt(0);  // 첫 번째 오브젝트를 리스트에서 제거
-            firstObject.SetActive(false);
+            //firstObject.SetActive(false);
             for (int i = 0; i < customerObjects.Count; i++)
             {                   //  앞쪽으로 한 칸씩 이동(위치)
                 Destination(customerObjects[i], counters[i]);

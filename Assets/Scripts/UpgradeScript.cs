@@ -105,16 +105,14 @@ public class UpgradeScript : MonoBehaviour
     {
         uiPanel.transform.DOMove(uiPos[1].position, 0.3f).SetEase(Ease.InCirc);
     }
-    IEnumerator EnableStove(GameObject stove)
+    public IEnumerator EnableStove(GameObject stove)
     {
         UpgradeOff();
-        GameManager.instance.cameraManager.vCam.LookAt = stove.transform;
-        GameManager.instance.cameraManager.vCam.Follow = GameManager.instance.cameraManager.stoveEvent.transform;
+        GameManager.instance.cameraManager.CamCtrl(stove.transform, GameManager.instance.cameraManager.stoveEvent.transform);
         yield return new WaitForSeconds(1f);
         stove.SetActive(true);
         stove.transform.DOScale(stoveScale, 0.6f).SetEase(Ease.OutElastic);
         yield return new WaitForSeconds(0.8f);
-        GameManager.instance.cameraManager.vCam.LookAt = GameManager.instance.player.transform;
-        GameManager.instance.cameraManager.vCam.Follow = GameManager.instance.cameraManager.cam.transform;
+        GameManager.instance.cameraManager.CamCtrl(GameManager.instance.player.transform, GameManager.instance.cameraManager.cam.transform);
     }
 }
