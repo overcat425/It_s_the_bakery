@@ -10,11 +10,11 @@ public class CounterScript : MonoBehaviour
     public Text[] requireText;
     private void Update()
     {
-        if(GameManager.instance.customerObjects.Count >= 1)IsFirstObject();
+        if(GameManager.instance.customerMoving.customerObjects.Count >= 1)IsFirstObject();
     }
     void IsFirstObject()        // 차례 된 손님의 상품 요구량 전시
     {
-        GameObject yourTurn = GameManager.instance.customerObjects[0];
+        GameObject yourTurn = GameManager.instance.customerMoving.customerObjects[0];
         CustomerScript customerScript = yourTurn.GetComponent<CustomerScript>();
         requireInven.transform.position = Camera.main.WorldToScreenPoint(yourTurn.transform.position + new Vector3(0, 3f, 0));
         if (customerScript.isMoving == false)

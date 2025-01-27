@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class OfficeGauge : MonoBehaviour
+public class GaugeScript : MonoBehaviour
 {
     float currentGauge;
     float maxGauge;
     float gaugeSpeed;
+    [SerializeField] GameObject gaugeObject;
 
     TextMeshPro tmp;
     bool isPlayerIn;
     Collider coll;
-    [SerializeField] GameObject office;
+    [SerializeField] GameObject content;
     Vector3 officeScale = new Vector3(1f, 1f, 1f);
 
     private void Awake()
@@ -47,6 +48,8 @@ public class OfficeGauge : MonoBehaviour
                 {
                     GameManager.instance.money -= 1;
                     currentGauge += gaugeSpeed;
+                    gaugeObject.transform.Translate(Vector3.up * (Time.fixedDeltaTime/20f));
+                    gaugeObject.transform.localScale = new Vector3(1,currentGauge/500, 1);
                     GameManager.instance.MoneySync();
                     if (currentGauge >= maxGauge)
                     {
@@ -63,10 +66,9 @@ public class OfficeGauge : MonoBehaviour
     }
     IEnumerator OfficeOn()
     {
-        GameManager.instance.cameraManager.CamCtrl(office.transform, GameManager.instance.cameraManager.officeEvent.transform);
+        GameManager.instance.cameraManager.CamCtrl(content.transform, GameManager.instance.cameraManager.officeEvent.transform);
         yield return new WaitForSeconds(0.7f);
-        office.SetActive(true);
-        office.transform.DOScale(officeScale, 1.2f).SetEase(Ease.OutElastic);
+        content.transform.DOScale(officeScale, 1.2f).SetEase(Ease.OutElastic);
         yield return new WaitForSeconds(1.5f);
         GameManager.instance.cameraManager.CamCtrl(GameManager.instance.player.transform, GameManager.instance.cameraManager.cam.transform);
         Destroy(gameObject);

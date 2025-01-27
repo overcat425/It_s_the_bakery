@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public UpgradeScript upgradeScript;
     public CustomerScript customerScript;
     public CustomersPool customersPool;
+    public CustomerMoving customerMoving;
     public CounterScript counterScript;
     public CameraManager cameraManager;
     public Player player;
@@ -24,10 +25,10 @@ public class GameManager : MonoBehaviour
     [Header("일시정지 UI")]
     [SerializeField] GameObject pauseUi;
 
-    [SerializeField] Transform spawnPoint;
-    public Transform destroyPoint;
-    public List<Transform> counters = new List<Transform>();
-    public List <GameObject> customerObjects = new List <GameObject>();
+    //[SerializeField] Transform spawnPoint;
+    //public Transform destroyPoint;
+    //public List<Transform> counters = new List<Transform>();
+    //public List <GameObject> customerObjects = new List <GameObject>();
     private void Awake()        // 싱글톤
     {
         if (instance == null)
@@ -39,50 +40,50 @@ public class GameManager : MonoBehaviour
         }
         Costing();
     }
-    void Start()
-    {
-        StartCoroutine("CustomersComing");
-    }
-    public void Destination(GameObject cust, Transform dest)
-    {                                       // 손님들 목적지 설정
-        NavMeshAgent agent = cust.GetComponent<NavMeshAgent>();
-        if (agent != null)
-        {
-            agent.SetDestination(dest.position);
-        }
-    }
-    public void ShiftObjectsForward()    // 손님들 앞으로 한칸씩 이동
-    {
-        if (customerObjects.Count > 0)
-        {
-            GameObject firstObject = customerObjects[0];
-            customerObjects.RemoveAt(0);  // 첫 번째 오브젝트를 리스트에서 제거
-            //firstObject.SetActive(false);
-            for (int i = 0; i < customerObjects.Count; i++)
-            {                   //  앞쪽으로 한 칸씩 이동(위치)
-                Destination(customerObjects[i], counters[i]);
-            }
-            if (customerObjects.Count > 0 && counters.Count > customerObjects.Count)
-            {           // 앞쪽으로 한 칸씩 이동(리스트번호)
-                Destination(customerObjects[customerObjects.Count - 1], counters[customerObjects.Count-1]);
-            }
-        }
-    }
-    IEnumerator CustomersComing()       // 손님 생성 메소드
-    {
-        while (true)
-        {
-            float rand = Random.Range(3, 7);        // 3~6초 랜덤쿨타임
-            yield return new WaitForSeconds(rand);
-            if(customerObjects.Count < 8)
-            {
-                GameObject enemy = customersPool.MakeBugy(0);
-                enemy.transform.position = spawnPoint.position;
-                customerObjects.Add(enemy);
-                Destination(enemy, counters[customerObjects.Count-1]);
-            }
-        }
-    }
+    //void Start()
+    //{
+    //    StartCoroutine("CustomersComing");
+    //}
+    //public void Destination(GameObject cust, Transform dest)
+    //{                                       // 손님들 목적지 설정
+    //    NavMeshAgent agent = cust.GetComponent<NavMeshAgent>();
+    //    if (agent != null)
+    //    {
+    //        agent.SetDestination(dest.position);
+    //    }
+    //}
+    //public void ShiftObjectsForward()    // 손님들 앞으로 한칸씩 이동
+    //{
+    //    if (customerObjects.Count > 0)
+    //    {
+    //        GameObject firstObject = customerObjects[0];
+    //        customerObjects.RemoveAt(0);  // 첫 번째 오브젝트를 리스트에서 제거
+    //        //firstObject.SetActive(false);
+    //        for (int i = 0; i < customerObjects.Count; i++)
+    //        {                   //  앞쪽으로 한 칸씩 이동(위치)
+    //            Destination(customerObjects[i], counters[i]);
+    //        }
+    //        if (customerObjects.Count > 0 && counters.Count > customerObjects.Count)
+    //        {           // 앞쪽으로 한 칸씩 이동(리스트번호)
+    //            Destination(customerObjects[customerObjects.Count - 1], counters[customerObjects.Count-1]);
+    //        }
+    //    }
+    //}
+    //IEnumerator CustomersComing()       // 손님 생성 메소드
+    //{
+    //    while (true)
+    //    {
+    //        float rand = Random.Range(3, 7);        // 3~6초 랜덤쿨타임
+    //        yield return new WaitForSeconds(rand);
+    //        if(customerObjects.Count < 8)
+    //        {
+    //            GameObject enemy = customersPool.MakeBugy(0);
+    //            enemy.transform.position = spawnPoint.position;
+    //            customerObjects.Add(enemy);
+    //            Destination(enemy, counters[customerObjects.Count-1]);
+    //        }
+    //    }
+    //}
     public void GetMoney(int cost)      // 손님 계산도와드리겠읍니다
     {
         money += cost;

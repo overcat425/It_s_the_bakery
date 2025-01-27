@@ -111,9 +111,9 @@ public class Player : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if (GameManager.instance.customerObjects.Count <= 0) return;
+        if (GameManager.instance.customerMoving.customerObjects.Count <= 0) return;
         if (other.gameObject.CompareTag("Counter")){
-            CustomerScript customerScript = GameManager.instance.customerObjects[0].GetComponent<CustomerScript>();
+            CustomerScript customerScript = GameManager.instance.customerMoving.customerObjects[0].GetComponent<CustomerScript>();
             for (int i = 0; i < playerDesserts.Length; i++)
             {
                 int req = customerScript.requires[i];

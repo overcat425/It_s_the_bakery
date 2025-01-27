@@ -36,7 +36,7 @@ public class UpgradeScript : MonoBehaviour
         stoveLevel = 1;
         maxLevel = 3;
     }
-    public void OnClickUpgradebakeSpeed(int i)      
+    public void OnClickUpgrade(int i)      
     {
         if (levels[i]-1 < maxLevel && GameManager.instance.money >= costTable[i] * levels[i])
         {

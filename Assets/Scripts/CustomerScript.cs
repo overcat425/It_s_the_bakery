@@ -33,9 +33,9 @@ public class CustomerScript : MonoBehaviour
         MoveOrNot();
         if (requires[0] <= 0 && requires[1]<=0)
         {
-            GameManager.instance.ShiftObjectsForward();
-            requires[0]++; // 둘다 00인 상태면 리스트에 있는걸 싹다 빼버림
-            GameManager.instance.Destination(gameObject, GameManager.instance.destroyPoint);
+            GameManager.instance.customerMoving.ShiftObjectsForward();
+            requires[0]++; // 둘다 00인 상태면 리스트에 있는걸 싹다 빼버림..
+            GameManager.instance.customerMoving.Destination(gameObject, GameManager.instance.customerMoving.destroyPoint);
         }
     }
     private void OnTriggerEnter(Collider other)
