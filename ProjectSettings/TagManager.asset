@@ -12,6 +12,7 @@ TagManager:
   - CakeStove
   - Upgrade
   - Destroy
+  - Seat
   layers:
   - Default
   - TransparentFX

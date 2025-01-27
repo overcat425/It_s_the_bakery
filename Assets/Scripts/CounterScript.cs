@@ -23,12 +23,12 @@ public class CounterScript : MonoBehaviour
             customerScript.isRequesting = true;
             for (int k = 0; k < requireUi.Length; k++)
             {
-                bool isUiHide = customerScript.requires[k] > 0 ? false : true;
+                bool isUiHide = customerScript.requires[k] - customerScript.getDesserts[k] > 0 ? false : true;
                 requireUi[k].gameObject.SetActive(!isUiHide);
             }
             for (int i = 0; i < requireText.Length; i++)
             {
-                requireText[i].text = string.Format("{0}", customerScript.requires[i]);
+                requireText[i].text = string.Format("{0}", customerScript.requires[i] - customerScript.getDesserts[i]);
             }
         }
         else requireInven.SetActive(false);

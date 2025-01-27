@@ -791,7 +791,10 @@ MonoBehaviour:
   homeTrans: {fileID: 0}
   isMoving: 0
   isRequesting: 0
+  isEating: 0
+  isFull: 0
   requires: 0000000000000000
+  getDesserts: 0000000000000000
   anim: {fileID: 0}
 --- !u!1 &1630692554341456915
 GameObject:

@@ -117,7 +117,7 @@ public class Player : MonoBehaviour
             for (int i = 0; i < playerDesserts.Length; i++)
             {
                 int req = customerScript.requires[i];
-                if (req == 0 || customerScript.isRequesting == false) continue;
+                if (req <= customerScript.getDesserts[i] || customerScript.isRequesting == false) continue;
                 while (playerDesserts[i] > 0)
                 {
                     switch (i)
@@ -132,10 +132,12 @@ public class Player : MonoBehaviour
                             break;
                     }
                     playerDesserts[i]--;
-                    req--;
-                    if (req <= 0) break;
+                    customerScript.getDesserts[i]++;
+                    if(req <= customerScript.getDesserts[i]) break;
+                    //req--;
+                    //if (req <= 0) break;
                 }
-                customerScript.requires[i] = req;
+                //customerScript.requires[i] = req;
                 GameManager.instance.upgradeScript.DisableBtn();
             }
         }
