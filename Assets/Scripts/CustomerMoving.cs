@@ -16,7 +16,7 @@ public class CustomerMoving : MonoBehaviour
     public Transform[] turn;
     [SerializeField] GameObject noSeat;
 
-    private void Start()
+    private void OnEnable()
     {
         StartCoroutine("CustomersComing");
     }

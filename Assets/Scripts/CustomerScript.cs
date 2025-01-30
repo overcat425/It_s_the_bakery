@@ -16,7 +16,9 @@ public class CustomerScript : MonoBehaviour
     bool isCarrying;
     public int[] requires; // 0은 도넛요구량, 1은 케이크요구량
     public int[] getDesserts;   // 받은 도넛/케이크
-    int eatingTime;
+    [SerializeField] GameObject[] donutsPrefab;
+    [SerializeField] GameObject[] cakePrefab;
+    public int eatingTime;
     private NavMeshAgent navMesh;
     Rigidbody rigid;
     public Animator anim;
@@ -41,6 +43,7 @@ public class CustomerScript : MonoBehaviour
         if (getDesserts[0] == requires[0] && getDesserts[1] == requires[1]) isFull++;
         if (isFull == 1)
         {
+            StartCoroutine("HoldDesserts");
             GameManager.instance.customerMoving.ShiftObjectsForward();
             isFull++;
             //GameManager.instance.customerMoving.Destination(gameObject, GameManager.instance.customerMoving.seats[0]);//destroyPoint);
@@ -80,15 +83,15 @@ public class CustomerScript : MonoBehaviour
     }
     IEnumerator EatingTime()        // 먹는 동작
     {
-        int index = GameManager.instance.customerMoving.seatObjects.IndexOf(gameObject);
-        LookAtTable(index);
+        int index = GameManager.instance.customerMoving.seatObjects.IndexOf(gameObject);    // 앉을 자리번호 선택
+        SitOn(index);
         anim.SetTrigger("sit");
         yield return new WaitUntil(() =>
         {
             AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
             return state.IsName("StandToSit") && state.normalizedTime >= 0.8f;
         });
-        anim.SetBool("isEating",true);
+        anim.SetBool("isEating", true);
         navMesh.isStopped = true;
         yield return new WaitForSeconds(eatingTime);
         anim.SetTrigger("stand");
@@ -105,6 +108,30 @@ public class CustomerScript : MonoBehaviour
             getDesserts[i] = 0;
         }
         navMesh.isStopped = false;
+    }
+    IEnumerator HoldDesserts()
+    {
+        yield return new WaitForSeconds(0.5f);
+        GameManager.instance.player.DessertsUi(getDesserts, donutsPrefab, cakePrefab);
+    }
+    void SitOn(int i)
+    {
+        for (int k = 0; k < getDesserts.Length; k++)
+        {
+            for (int j = 0; j < getDesserts[k]; j++)
+            {
+                switch (k)
+                {
+                    case 0:
+                        donutsPrefab[j].SetActive(false);
+                        break;
+                    case 1:
+                        cakePrefab[j].SetActive(false);
+                        break;
+                }
+            }
+        }
+        LookAtTable(i);
     }
     void LookAtTable(int i)
     {

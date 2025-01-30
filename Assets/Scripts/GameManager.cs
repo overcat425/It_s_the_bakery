@@ -14,13 +14,18 @@ public class GameManager : MonoBehaviour
     public CustomerMoving customerMoving;
     public CounterScript counterScript;
     public CameraManager cameraManager;
+    public GaugeScript gaugeScript;
+    public TextScript textScript;
+    public TutorialScript tutorialScript;
+    public ScriptData scriptData;
     public Player player;
 
-    [SerializeField] ItemData[] itemData;
     [SerializeField] Text moneyText;
     public int money;
     public int donutCost;
     public int cakeCost;
+    public bool isCounter;
+    public bool isDriveThru;
 
     [Header("일시정지 UI")]
     [SerializeField] GameObject pauseUi;
@@ -42,19 +47,9 @@ public class GameManager : MonoBehaviour
     }
     void Costing()      // 소지금 + 상품별 금액 초기화
     {
-        money = 0;
-        for (int i = 0; i < itemData.Length; i++)
-        {
-            switch (itemData[i].itemType)
-            {
-                case ItemData.ItemType.Doughnut:
-                    donutCost = 50;
-                    break;
-                case ItemData.ItemType.Cake:
-                    cakeCost = 100;
-                    break;
-            }
-        }
+        money = 300;
+        donutCost = 50;
+        cakeCost = 100;
     }
     public void MoneySync()
     {

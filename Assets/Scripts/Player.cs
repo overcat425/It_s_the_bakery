@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public float speed;
     //bool runKey;
     bool isCarrying;
+    bool[] isTuto = new bool[2];  // 0Àº Stove 1Àº Cust
     Vector3 moveVec;
     float camY;
     Animator anim;
@@ -34,7 +35,7 @@ public class Player : MonoBehaviour
     }
     private void LateUpdate()
     {
-        DessertsUi();
+        DessertsUi(playerDesserts, donutsPrefab, cakePrefab);
     }
     IEnumerator PlayerDesserts()
     {
@@ -79,6 +80,7 @@ public class Player : MonoBehaviour
             case "Stove":
                 if (stoveScript.stoveDesserts > 0)
                 {
+                    Tuto(0);
                     while (playerDesserts[0] < maxPlayerDesserts)
                     {
                         stoveScript.stoveDesserts--; playerDesserts[0]++;
@@ -134,27 +136,24 @@ public class Player : MonoBehaviour
                     playerDesserts[i]--;
                     customerScript.getDesserts[i]++;
                     if(req <= customerScript.getDesserts[i]) break;
-                    //req--;
-                    //if (req <= 0) break;
-                }
-                //customerScript.requires[i] = req;
+                }Tuto(1);
                 GameManager.instance.upgradeScript.DisableBtn();
             }
         }
     }
-    void DessertsUi()
+    public void DessertsUi(int[] desserts, GameObject[] donuts, GameObject[] cake)
     {
-        for(int i = 0; i < playerDesserts.Length; i++)
+        for(int i = 0; i < desserts.Length; i++)
         {
-            for (int j = 0; j < playerDesserts[i]; j++)
+            for (int j = 0; j < desserts[i]; j++)
             {
                 switch (i)
                 {
                     case 0:
-                        donutsPrefab[j].SetActive(true);
+                        donuts[j].SetActive(true);
                     break;
                         case 1:
-                        cakePrefab[j].SetActive(true);
+                        cake[j].SetActive(true);
                     break;
                 }
             }
@@ -167,5 +166,14 @@ public class Player : MonoBehaviour
             if (playerDesserts[i] > 0) isCarrying = true;
         }
         if (playerDesserts[0] == 0 && playerDesserts[1]==0) isCarrying= false;
+    }
+    void Tuto(int i)
+    {
+        if (isTuto[i] == false)
+        {
+            GameManager.instance.tutorialScript.NextPosition();
+            GameManager.instance.textScript.ShowNextText();
+            isTuto[i] = true;
+        }
     }
 }

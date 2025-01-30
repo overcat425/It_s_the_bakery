@@ -6,8 +6,7 @@ public class CameraManager : MonoBehaviour
 {
     public CinemachineVirtualCamera vCam;
     public Camera cam;
-    public Transform stoveEvent;
-    public Transform officeEvent;
+    public Transform[] eventCams;
     public Transform target;
     public Vector3 followVec;
     void Update()

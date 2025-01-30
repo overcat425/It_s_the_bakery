@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 789d84a35b4b15c4bb7de9f49188318b, type: 3}
+  m_Name: Script
+  m_EditorClassIdentifier: 
+  scriptTexts:
+  - text: "\uBB38\uC744 \uAC74\uC124\uD558\uC138\uC694!"
+  - text: "\uD640\uC744 \uC7A5\uC2DD\uD558\uC138\uC694!"
+  - text: "\uC624\uBE10\uC744 \uAD6C\uB9E4\uD558\uC138\uC694!"
+  - text: "\uCE74\uC6B4\uD130\uB97C \uAC74\uC124\uD558\uC138\uC694!"
+  - text: "\uC624\uBE10\uC5D0\uC11C \uB3C4\uB11B\uC744 \uAEBC\uB0B4\uC138\uC694."
+  - text: "\uC190\uB2D8\uC774 \uC624\uBA74,\n\uC190\uB2D8\uC5D0\uAC8C \uB3C4\uB11B\uC744
+      \uD310\uB9E4\uD558\uC138\uC694."
+  - text: "\uC774\uC81C \uB9C8\uC74C\uAECF \uD30C\uC138\uC694!"
+  - text: "\uC774\uC81C \uC624\uD53C\uC2A4\uC5D0\uC11C\n\uC5C5\uADF8\uB808\uC774\uB4DC\uB97C
+      \uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
+  - text: "\uB4DC\uB77C\uC774\uBE0C \uC2A4\uB8E8\uB3C4 \uC6B4\uC601\uD574\uBCF4\uC138\uC694!"

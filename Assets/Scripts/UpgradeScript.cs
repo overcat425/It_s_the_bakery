@@ -108,7 +108,7 @@ public class UpgradeScript : MonoBehaviour
     public IEnumerator EnableStove(GameObject stove)
     {
         UpgradeOff();
-        GameManager.instance.cameraManager.CamCtrl(stove.transform, GameManager.instance.cameraManager.stoveEvent.transform);
+        GameManager.instance.cameraManager.CamCtrl(stove.transform, GameManager.instance.cameraManager.eventCams[0].transform);
         yield return new WaitForSeconds(1f);
         stove.SetActive(true);
         stove.transform.DOScale(stoveScale, 0.6f).SetEase(Ease.OutElastic);
