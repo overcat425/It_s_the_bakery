@@ -113,8 +113,8 @@ public class Player : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if (GameManager.instance.customerMoving.customerObjects.Count <= 0) return;
         if (other.gameObject.CompareTag("Counter")){
+            if (GameManager.instance.customerMoving.customerObjects.Count <= 0) return; //손님이 없을떄는 동작하지 않음
             CustomerScript customerScript = GameManager.instance.customerMoving.customerObjects[0].GetComponent<CustomerScript>();
             for (int i = 0; i < playerDesserts.Length; i++)
             {
@@ -137,6 +137,34 @@ public class Player : MonoBehaviour
                     customerScript.getDesserts[i]++;
                     if(req <= customerScript.getDesserts[i]) break;
                 }Tuto(1);
+                GameManager.instance.upgradeScript.DisableBtn();
+            }
+        }
+        if (other.gameObject.CompareTag("Thru"))
+        {
+            if (GameManager.instance.customerMoving.carObjects.Count <= 0) return;
+            CarScript carScript = GameManager.instance.customerMoving.carObjects[0].GetComponent<CarScript>();
+            for (int i = 0; i < playerDesserts.Length; i++)
+            {
+                int req = carScript.requires[i];
+                if (req <= carScript.getDesserts[i] || carScript.isRequesting == false) continue;
+                while (playerDesserts[i] > 0)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            donutsPrefab[playerDesserts[i] - 1].SetActive(false);
+                            GameManager.instance.GetMoney(GameManager.instance.donutCost);
+                            break;
+                        case 1:
+                            cakePrefab[playerDesserts[i] - 1].SetActive(false);
+                            GameManager.instance.GetMoney(GameManager.instance.cakeCost);
+                            break;
+                    }
+                    playerDesserts[i]--;
+                    carScript.getDesserts[i]++;
+                    if (req <= carScript.getDesserts[i]) break;
+                }
                 GameManager.instance.upgradeScript.DisableBtn();
             }
         }

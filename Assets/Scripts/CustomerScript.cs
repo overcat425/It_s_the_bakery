@@ -8,18 +8,18 @@ using UnityEngine.UIElements;
 
 public class CustomerScript : MonoBehaviour
 {
-    public Transform homeTrans;
-    public bool isMoving;
+    //public Transform homeTrans;
+    public bool isMoving;       // 이동하고 있는지
     public bool isRequesting;   // 손님이 도착해서 주문하기도 전에 갖다주는 케이스 방지
-    public bool isEating;
-    public int isFull;
-    bool isCarrying;
+    public bool isEating;       // 좌석에 도착해서 먹기 시작
+    public int isFull;              // 디저트 요구사항 충족
+    bool isCarrying;            // 디저트 들고있는지 애니메이션여부
     public int[] requires; // 0은 도넛요구량, 1은 케이크요구량
     public int[] getDesserts;   // 받은 도넛/케이크
     [SerializeField] GameObject[] donutsPrefab;
     [SerializeField] GameObject[] cakePrefab;
     public int eatingTime;
-    private NavMeshAgent navMesh;
+    private NavMeshAgent navMesh;   // 이동경로
     Rigidbody rigid;
     public Animator anim;
 
@@ -35,7 +35,7 @@ public class CustomerScript : MonoBehaviour
         isMoving = true;
         isFull = 0;
         InitRequire();
-        eatingTime = Random.Range(30, 40);
+        eatingTime = Random.Range(25, 40);
     }
     void Update()
     {
@@ -86,16 +86,16 @@ public class CustomerScript : MonoBehaviour
         int index = GameManager.instance.customerMoving.seatObjects.IndexOf(gameObject);    // 앉을 자리번호 선택
         SitOn(index);
         anim.SetTrigger("sit");
-        yield return new WaitUntil(() =>
+        yield return new WaitUntil(() =>        //다 앉을 때까지 기다림
         {
             AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
             return state.IsName("StandToSit") && state.normalizedTime >= 0.8f;
         });
         anim.SetBool("isEating", true);
         navMesh.isStopped = true;
-        yield return new WaitForSeconds(eatingTime);
+        yield return new WaitForSeconds(eatingTime);    //먹는 시간
         anim.SetTrigger("stand");
-        yield return new WaitUntil(() =>
+        yield return new WaitUntil(() =>        //다 일어설 때까지 기다림
         {
             AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
             return state.IsName("SitToStand") && state.normalizedTime >= 1.0f;

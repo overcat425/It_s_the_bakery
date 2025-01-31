@@ -31,7 +31,7 @@ public class UpgradeScript : MonoBehaviour
     private void Awake()
     {
         levels = Enumerable.Repeat(1,4).ToArray();
-        bakeSpeed = 6;
+        bakeSpeed = 5;
         moveSpeed = 1;
         stoveLevel = 1;
         maxLevel = 3;

@@ -13,6 +13,7 @@ TagManager:
   - Upgrade
   - Destroy
   - Seat
+  - Thru
   layers:
   - Default
   - TransparentFX

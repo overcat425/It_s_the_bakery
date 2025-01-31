@@ -26,7 +26,7 @@ public class TextScript : MonoBehaviour
         tutorialText.text = scriptData.scriptTexts[(int)textType].text;
         float time = Time.time;
         tutorialText.gameObject.SetActive(true);
-        while (Time.time - time < 6f)
+        while (Time.time - time < 5f)
         {
             yield return tutorialText.transform.DOMoveY(tutorialText.transform.position.y + 20, 1f).SetEase(Ease.InOutSine).WaitForCompletion();
             yield return tutorialText.transform.DOMoveY(tutorialText.transform.position.y - 20, 1f).SetEase(Ease.InOutSine).WaitForCompletion();

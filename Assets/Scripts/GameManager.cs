@@ -48,8 +48,8 @@ public class GameManager : MonoBehaviour
     void Costing()      // 소지금 + 상품별 금액 초기화
     {
         money = 300;
-        donutCost = 50;
-        cakeCost = 100;
+        donutCost = 30;
+        cakeCost = 60;
     }
     public void MoneySync()
     {

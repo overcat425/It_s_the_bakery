@@ -114,6 +114,7 @@ public class GaugeScript : MonoBehaviour
             case Gauge.Drive:
                 prop.transform.DOScale(scaleBigger, 1.2f).SetEase(Ease.OutElastic);
                 StartCoroutine(textScript.TextEffect(TextScript.TextType.Drive));
+                GameManager.instance.customerMoving.isThruEnable = true;
                 break;
         }gameObject.transform.localScale = Vector3.zero;
         GameManager.instance.tutorialScript.NextPosition();

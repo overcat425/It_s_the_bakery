@@ -6,7 +6,7 @@ public class TableScript : MonoBehaviour
 {
     public GameObject[] donutsPrefab;
     public GameObject[] cakePrefab;
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)     // 자리에 앉는 오브젝트가 가지고있는 디저트 수를 받아서 식탁에 내려놓음
     {
         GameObject cust = other.gameObject;
         CustomerScript customerScript = cust.GetComponent<CustomerScript>();
