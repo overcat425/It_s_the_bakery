@@ -19,6 +19,7 @@ public class GaugeScript : MonoBehaviour
     TextMeshPro tmp;
     bool isPlayerIn;
     Collider coll;
+    float timer;
 
     Vector3 scaleBigger = new Vector3(1f, 1f, 1f);
 
@@ -72,6 +73,12 @@ public class GaugeScript : MonoBehaviour
                     gaugeObject.transform.Translate(Vector3.up * (Time.fixedDeltaTime/(20f * (maxGauge/500))));
                     gaugeObject.transform.localScale = new Vector3(1,currentGauge/maxGauge, 1);
                     GameManager.instance.MoneySync();
+                    timer += Time.deltaTime;
+                    if (timer > 0.15f)
+                    {
+                        SoundManager.instance.PlaySound(SoundManager.Effect.Gauge);
+                        timer = 0f;
+                    }
                     if (currentGauge >= maxGauge)
                     {
                         isPlayerIn=false;
@@ -89,19 +96,18 @@ public class GaugeScript : MonoBehaviour
     {
         CameraManager cameraManager = GameManager.instance.cameraManager;
         TextScript textScript = GameManager.instance.textScript;
+        SoundManager.instance.PlaySound(SoundManager.Effect.Scale);
         switch (type)
         {
             case Gauge.Door:
             case Gauge.Hall:
+            case Gauge.Counter:
                 prop.transform.DOScale(scaleBigger, 0.8f).SetEase(Ease.OutElastic);
+                if(type==Gauge.Counter)customerStart.SetActive(true);
                 break;
             case Gauge.Stove:
                 prop.SetActive(true);
                 prop.transform.DOScale(GameManager.instance.upgradeScript.stoveScale, 0.8f).SetEase(Ease.OutElastic);
-                break;
-            case Gauge.Counter:
-                prop.transform.DOScale(scaleBigger, 1f).SetEase(Ease.OutElastic);
-                customerStart.SetActive(true);
                 break;
             case Gauge.Office:
                 cameraManager.CamCtrl(prop.transform, cameraManager.eventCams[1].transform);

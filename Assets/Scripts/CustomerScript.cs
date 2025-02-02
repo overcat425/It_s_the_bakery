@@ -46,6 +46,7 @@ public class CustomerScript : MonoBehaviour
             StartCoroutine("HoldDesserts");
             GameManager.instance.customerMoving.ShiftObjectsForward();
             isFull++;
+            SoundManager.instance.PlaySound(SoundManager.Effect.Counter);
             //GameManager.instance.customerMoving.Destination(gameObject, GameManager.instance.customerMoving.seats[0]);//destroyPoint);
         }
     }

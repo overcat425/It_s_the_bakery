@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -10,9 +12,9 @@ public class Player : MonoBehaviour
     float hor;
     float ver;
     public float speed;
-    //bool runKey;
     bool isCarrying;
     bool[] isTuto = new bool[2];  // 0은 Stove 1은 Cust
+    public Vector2 inputVec;
     Vector3 moveVec;
     float camY;
     Animator anim;
@@ -21,16 +23,16 @@ public class Player : MonoBehaviour
     public int[] playerDesserts = { 0, 0 };  // 0이 Donut, 1이 Cake
     [SerializeField] GameObject[] donutsPrefab;
     [SerializeField] GameObject[] cakePrefab;
-    public int maxPlayerDesserts = 5;
+    public int maxPlayerDesserts;
     void Start()
     {
+        maxPlayerDesserts = 5;
         rigid = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         StartCoroutine("PlayerDesserts");
     }
     void Update()
     {
-        Inputs();
         Move();
     }
     private void LateUpdate()
@@ -44,19 +46,17 @@ public class Player : MonoBehaviour
             yield return new WaitForSeconds(3f);
         }
     }
-    void Inputs()
-    {
-        hor = Input.GetAxisRaw("Horizontal");
-        ver = Input.GetAxisRaw("Vertical");
-        //runKey = Input.GetButton("Run");
-        //jumpKey = Input.GetButtonDown("Jump");
-    }
+    //void OnMove(InputValue value)
+    //{
+    //    //inputVec = value.Get<Vector2>();
+    //}
     void Move()
     {
         camY = Camera.main.transform.eulerAngles.y;     // 카메라 -45 회전에 대한 해결책
         Quaternion camRot = Quaternion.Euler(0f, camY, 0f);     // 카메라의 Y축만 받은 뒤,
         speed = (2 + GameManager.instance.upgradeScript.moveSpeed * 0.3f);
-        moveVec = camRot *  new Vector3(hor, 0, ver).normalized;            // 플레이어의 이동값에 곱해줌
+        inputVec = GameManager.instance.joystickScript.inputVec;
+        moveVec = camRot *  new Vector3(inputVec.x, 0, inputVec.y);            // 플레이어의 이동값에 곱해줌
         transform.position += moveVec * speed * Time.deltaTime;
         isCarrying = playerDesserts[0] == 0 && playerDesserts[1]==0 ? false : true;
         if (!isCarrying)
@@ -78,28 +78,10 @@ public class Player : MonoBehaviour
         switch (collision.gameObject.tag)
         {
             case "Stove":
-                if (stoveScript.stoveDesserts > 0)
-                {
-                    Tuto(0);
-                    while (playerDesserts[0] < maxPlayerDesserts)
-                    {
-                        stoveScript.stoveDesserts--; playerDesserts[0]++;
-                        if (stoveScript.stoveDesserts <= 0) break;
-                    }
-                }
+                DessertsPickUp(stoveScript, 0);
                 break;
             case "CakeStove":
-                if (stoveScript.stoveDesserts > 0)
-                {
-                    if (stoveScript.stoveDesserts > 0)
-                    {
-                        while (playerDesserts[1] < maxPlayerDesserts)
-                        {
-                            stoveScript.stoveDesserts--; playerDesserts[1]++;
-                            if (stoveScript.stoveDesserts <= 0) break;
-                        }
-                    }
-                }
+                DessertsPickUp(stoveScript, 1);
                 break;
             case "Trash":
                 for (int i = 0; i < maxPlayerDesserts; i++)
@@ -111,79 +93,68 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+    void DessertsPickUp(StoveScript stoveScript, int i)
+    {
+        if (stoveScript.stoveDesserts <= 0) return;
+        if (i == 0) Tuto(0);
+        while (playerDesserts[i] < maxPlayerDesserts && stoveScript.stoveDesserts > 0)
+        {
+            stoveScript.stoveDesserts--;
+            playerDesserts[i]++;
+            SoundManager.instance.PlaySound(SoundManager.Effect.Click);
+        }
+    }
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Counter")){
             if (GameManager.instance.customerMoving.customerObjects.Count <= 0) return; //손님이 없을떄는 동작하지 않음
             CustomerScript customerScript = GameManager.instance.customerMoving.customerObjects[0].GetComponent<CustomerScript>();
-            for (int i = 0; i < playerDesserts.Length; i++)
-            {
-                int req = customerScript.requires[i];
-                if (req <= customerScript.getDesserts[i] || customerScript.isRequesting == false) continue;
-                while (playerDesserts[i] > 0)
-                {
-                    switch (i)
-                    {
-                        case 0:
-                            donutsPrefab[playerDesserts[i] - 1].SetActive(false);
-                            GameManager.instance.GetMoney(GameManager.instance.donutCost);
-                            break;
-                        case 1:
-                            cakePrefab[playerDesserts[i] - 1].SetActive(false);
-                            GameManager.instance.GetMoney(GameManager.instance.cakeCost);
-                            break;
-                    }
-                    playerDesserts[i]--;
-                    customerScript.getDesserts[i]++;
-                    if(req <= customerScript.getDesserts[i]) break;
-                }Tuto(1);
-                GameManager.instance.upgradeScript.DisableBtn();
-            }
+            GetMoney(customerScript.requires, customerScript.getDesserts, customerScript.isRequesting);
         }
         if (other.gameObject.CompareTag("Thru"))
         {
             if (GameManager.instance.customerMoving.carObjects.Count <= 0) return;
             CarScript carScript = GameManager.instance.customerMoving.carObjects[0].GetComponent<CarScript>();
-            for (int i = 0; i < playerDesserts.Length; i++)
+            GetMoney(carScript.requires, carScript.getDesserts, carScript.isRequesting);
+        }
+    }
+    void GetMoney(int[] requires, int[] getDesserts, bool isRequesting) {
+        for (int i = 0; i < playerDesserts.Length; i++)
+        {
+            if(requires[i] <= getDesserts[i] || isRequesting == false) continue;
+            while (playerDesserts[i] > 0)
             {
-                int req = carScript.requires[i];
-                if (req <= carScript.getDesserts[i] || carScript.isRequesting == false) continue;
-                while (playerDesserts[i] > 0)
-                {
-                    switch (i)
-                    {
-                        case 0:
-                            donutsPrefab[playerDesserts[i] - 1].SetActive(false);
-                            GameManager.instance.GetMoney(GameManager.instance.donutCost);
-                            break;
-                        case 1:
-                            cakePrefab[playerDesserts[i] - 1].SetActive(false);
-                            GameManager.instance.GetMoney(GameManager.instance.cakeCost);
-                            break;
-                    }
-                    playerDesserts[i]--;
-                    carScript.getDesserts[i]++;
-                    if (req <= carScript.getDesserts[i]) break;
-                }
-                GameManager.instance.upgradeScript.DisableBtn();
-            }
+                HandDessert(i);
+                playerDesserts[i]--;
+                getDesserts[i]++;
+                if (requires[i] <= getDesserts[i]) break;
+            }if (i == 0) Tuto(1);
+        }
+        GameManager.instance.upgradeScript.DisableBtn();
+    }
+    void HandDessert(int i)
+    {
+        switch (i)
+        {
+            case 0:
+                donutsPrefab[playerDesserts[i] - 1].SetActive(false);
+                GameManager.instance.GetMoney(GameManager.instance.donutCost);
+                break;
+            case 1:
+                cakePrefab[playerDesserts[i] - 1].SetActive(false);
+                GameManager.instance.GetMoney(GameManager.instance.cakeCost);
+                break;
         }
     }
     public void DessertsUi(int[] desserts, GameObject[] donuts, GameObject[] cake)
     {
-        for(int i = 0; i < desserts.Length; i++)
+        GameObject[][] dessertObjects = { donuts, cake }; // 0: 도넛, 1: 케이크
+        for (int i = 0; i < desserts.Length; i++)
         {
-            for (int j = 0; j < desserts[i]; j++)
+            int limit = Mathf.Min(desserts[i], dessertObjects[i].Length);
+            for (int j = 0; j < limit; j++)
             {
-                switch (i)
-                {
-                    case 0:
-                        donuts[j].SetActive(true);
-                    break;
-                        case 1:
-                        cake[j].SetActive(true);
-                    break;
-                }
+                dessertObjects[i][j].SetActive(true);
             }
         }
     }

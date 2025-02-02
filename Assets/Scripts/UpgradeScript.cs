@@ -17,6 +17,7 @@ public class UpgradeScript : MonoBehaviour
     public int bakeSpeed;
     public int moveSpeed;
     public int stoveLevel;
+    public int capacityLevel;
     int maxLevel;
 
     public GameObject[] Stoves;
@@ -38,6 +39,7 @@ public class UpgradeScript : MonoBehaviour
     }
     public void OnClickUpgrade(int i)      
     {
+        SoundManager.instance.PlaySound(SoundManager.Effect.Click);
         if (levels[i]-1 < maxLevel && GameManager.instance.money >= costTable[i] * levels[i])
         {
             GameManager.instance.money -= costTable[i] * levels[i];
@@ -55,6 +57,8 @@ public class UpgradeScript : MonoBehaviour
                     StartCoroutine(EnableStove(Stoves[stoveLevel-2]));
                     break;
                 case 3:
+                    capacityLevel++;
+                    GameManager.instance.player.maxPlayerDesserts++;
                     break;
             }
             UpgradeSync(i, levels[i], costTable[i] * levels[i]);
@@ -110,6 +114,7 @@ public class UpgradeScript : MonoBehaviour
         UpgradeOff();
         GameManager.instance.cameraManager.CamCtrl(stove.transform, GameManager.instance.cameraManager.eventCams[0].transform);
         yield return new WaitForSeconds(1f);
+        SoundManager.instance.PlaySound(SoundManager.Effect.Scale);
         stove.SetActive(true);
         stove.transform.DOScale(stoveScale, 0.6f).SetEase(Ease.OutElastic);
         yield return new WaitForSeconds(0.8f);

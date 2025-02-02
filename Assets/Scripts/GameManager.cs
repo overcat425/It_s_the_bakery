@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public TextScript textScript;
     public TutorialScript tutorialScript;
     public ScriptData scriptData;
+    public JoystickScript joystickScript;
     public Player player;
 
     [SerializeField] Text moneyText;
@@ -47,7 +48,7 @@ public class GameManager : MonoBehaviour
     }
     void Costing()      // 소지금 + 상품별 금액 초기화
     {
-        money = 300;
+        money = 9999;
         donutCost = 30;
         cakeCost = 60;
     }

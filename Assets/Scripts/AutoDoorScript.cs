@@ -51,6 +51,7 @@ public class AutoDoorScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         isActivate = true;
+        SoundManager.instance.PlaySound(SoundManager.Effect.Customer);
     }
     private void OnTriggerExit(Collider other)
     {
