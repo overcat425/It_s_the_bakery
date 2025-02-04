@@ -15,7 +15,7 @@ public class JoystickScript : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     Vector2 GetInputVector() => inputVec;
     void Start()
     {
-        radius = 45f;
+        radius = 50f;
     }
     public void OnPointerDown(PointerEventData eventData)   // ÅÍÄ¡ ½Ã
     {

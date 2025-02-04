@@ -33,13 +33,13 @@ public class UpgradeScript : MonoBehaviour
     {
         levels = Enumerable.Repeat(1,4).ToArray();
         bakeSpeed = 5;
-        moveSpeed = 1;
+        moveSpeed = 10;
         stoveLevel = 1;
         maxLevel = 3;
     }
     public void OnClickUpgrade(int i)      
     {
-        SoundManager.instance.PlaySound(SoundManager.Effect.Click);
+        SoundManager.instance.PlaySound(SoundManager.Effect.Click); // È¿°úÀ½
         if (levels[i]-1 < maxLevel && GameManager.instance.money >= costTable[i] * levels[i])
         {
             GameManager.instance.money -= costTable[i] * levels[i];

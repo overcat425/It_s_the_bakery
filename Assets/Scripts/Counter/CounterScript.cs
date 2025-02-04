@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CounterScript : MonoBehaviour
+public class CounterScript : MonoBehaviour  // 손님 요구사항을 맡는 스크립트(계산X)
 {
     public GameObject[] requireInven;   // 손님이 요구하는 상품 Ui(전체추적용)
     public GameObject[] requireUi;      // 손님이 요구하는 상품별Ui

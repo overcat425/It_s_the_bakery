@@ -9,17 +9,12 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     Rigidbody rigid;
-    float hor;
-    float ver;
     public float speed;
-    bool isCarrying;
     bool[] isTuto = new bool[2];  // 0은 Stove 1은 Cust
     public Vector2 inputVec;
-    Vector3 moveVec;
+    public Vector3 moveVec;
     float camY;
-    Animator anim;
 
-    //public Queue<int> playerQueue = new Queue<int>(); // 생각해보니까 굳이 큐로 써야되는가...??????????
     public int[] playerDesserts = { 0, 0 };  // 0이 Donut, 1이 Cake
     [SerializeField] GameObject[] donutsPrefab;
     [SerializeField] GameObject[] cakePrefab;
@@ -28,8 +23,7 @@ public class Player : MonoBehaviour
     {
         maxPlayerDesserts = 5;
         rigid = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();
-        StartCoroutine("PlayerDesserts");
+        //StartCoroutine("PlayerDesserts");
     }
     void Update()
     {
@@ -58,18 +52,6 @@ public class Player : MonoBehaviour
         inputVec = GameManager.instance.joystickScript.inputVec;
         moveVec = camRot *  new Vector3(inputVec.x, 0, inputVec.y);            // 플레이어의 이동값에 곱해줌
         transform.position += moveVec * speed * Time.deltaTime;
-        isCarrying = playerDesserts[0] == 0 && playerDesserts[1]==0 ? false : true;
-        if (!isCarrying)
-        {
-            anim.SetBool("isCarry", false); anim.SetBool("isCarryMove", false);
-            anim.SetBool("isWalk", moveVec != Vector3.zero);
-        }else if (isCarrying)
-        {
-            anim.SetBool("isCarry", moveVec == Vector3.zero);
-            anim.SetBool("isCarryMove", moveVec != Vector3.zero);
-        }
-        //if (moveVec != Vector3.zero)anim.SetBool("isRun", runKey);
-        //if (moveVec == Vector3.zero) anim.SetBool("isRun", false);
         transform.LookAt(moveVec+transform.position);
     }
     private void OnCollisionEnter(Collision collision)
@@ -158,14 +140,14 @@ public class Player : MonoBehaviour
             }
         }
     }
-    void IsCarrying()
-    {
-        for(int i = 0; i < playerDesserts.Length; i++)
-        {
-            if (playerDesserts[i] > 0) isCarrying = true;
-        }
-        if (playerDesserts[0] == 0 && playerDesserts[1]==0) isCarrying= false;
-    }
+    //void IsCarrying()
+    //{
+    //    for(int i = 0; i < playerDesserts.Length; i++)
+    //    {
+    //        if (playerDesserts[i] > 0) isCarrying = true;
+    //    }
+    //    if (playerDesserts[0] == 0 && playerDesserts[1]==0) isCarrying= false;
+    //}
     void Tuto(int i)
     {
         if (isTuto[i] == false)

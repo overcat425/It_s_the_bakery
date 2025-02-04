@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6144555637652670343}
   - component: {fileID: 2344269707663426097}
   - component: {fileID: 1447518432162681405}
+  - component: {fileID: -7537658053127729010}
   m_Layer: 8
   m_Name: DonutPrefab
   m_TagString: Untagged
@@ -106,3 +107,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: dc74e53f7f0b5495b9e760dd4803accb, type: 3}
+--- !u!114 &-7537658053127729010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 587805330831411782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b9eff575414b86419c5f37330acf2e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemType: 0
+  itemName: 
+  cost: 0
+  itemIcon: {fileID: 0}

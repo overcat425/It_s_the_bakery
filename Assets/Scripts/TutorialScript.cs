@@ -37,7 +37,7 @@ public class TutorialScript : MonoBehaviour
     public void NextPosition()
     {
         if (num >= 7) return;
-        notice.transform.position = target[num].position + new Vector3(0, 2.5f, 0);
+        //notice.transform.position = target[num].position + new Vector3(0, 2.5f, 0);
         num++;
     }
     void Rotating()

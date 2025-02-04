@@ -50,13 +50,13 @@ public class CustomerMoving : MonoBehaviour
             agent.SetDestination(dest.position);
         }
     }
-    public void ShiftObjectsForward()    // 손님들 앞으로 한칸씩 이동
+    public void ShiftObjectsForward()    // 줄 선 손님들 앞으로 한칸씩 이동
     {
         if (customerObjects.Count > 0&& IsThereSeat()>0 )
         {
             noSeat.SetActive(false);
-            GameObject firstObject = customerObjects[0];
-            FindSeat(firstObject);
+            GameObject firstObject = customerObjects[0];        // 첫번째 오브젝트 지정 후
+            FindSeat(firstObject);  // 좌석으로 이동시키고
             customerObjects.RemoveAt(0);  // 첫 번째 오브젝트를 리스트에서 제거
             for (int i = 0; i < customerObjects.Count; i++)
             {                   //  앞쪽으로 한 칸씩 이동(위치)
@@ -66,8 +66,20 @@ public class CustomerMoving : MonoBehaviour
             {           // 앞쪽으로 한 칸씩 이동(리스트번호)
                 Destination(customerObjects[customerObjects.Count - 1], counters[customerObjects.Count - 1]);
             }
-        }else if(IsThereSeat() <= 0) {
+        }else if(IsThereSeat() <= 0) {  // 자리 없으면 자리없음 말풍선 띄우기
             StartCoroutine("NoSeat");
+        }
+    }
+    public void FindSeat(GameObject cust)   // 좌석 찾아서 이동하는 메소드
+    {
+        for (int i = 0; i < seats.Count; i++)
+        {
+            if (seatObjects[i] == null)
+            {
+                seatObjects[i] = cust;
+                Destination(seatObjects[i], seats[i]);
+                break;
+            }
         }
     }
     public void CarsShiftForward()
@@ -87,23 +99,11 @@ public class CustomerMoving : MonoBehaviour
             }
         }
     }
-    public void FindSeat(GameObject cust)   // 좌석 찾아서 이동하는 메소드
-    {
-        for (int i = 0; i < seats.Count; i++)
-        {
-            if (seatObjects[i] == null)
-            {
-                seatObjects[i] = cust;
-                Destination(seatObjects[i], seats[i]);
-                break;
-            }
-        }
-    }
     IEnumerator CustomersComing()       // 손님 생성 메소드
     {
         while (true)
         {
-            float rand = Random.Range(3, 7);        // 3~6초 랜덤쿨타임
+            float rand = Random.Range(4, 9);        // 4~8초 랜덤쿨타임
             yield return new WaitForSeconds(rand);
             if (customerObjects.Count < 8)
             {

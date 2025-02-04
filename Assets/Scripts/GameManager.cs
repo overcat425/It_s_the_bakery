@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public CustomersPool customersPool;
     public CustomerMoving customerMoving;
     public CounterScript counterScript;
+    public CounterDisplay counterDisplay;
     public CameraManager cameraManager;
     public GaugeScript gaugeScript;
     public TextScript textScript;
@@ -20,6 +21,8 @@ public class GameManager : MonoBehaviour
     public ScriptData scriptData;
     public JoystickScript joystickScript;
     public Player player;
+    public PlayerHand playerHand;
+    public GettingMoney gettingMoney;
 
     [SerializeField] Text moneyText;
     public int money;
@@ -30,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     [Header("¿œΩ√¡§¡ˆ UI")]
     [SerializeField] GameObject pauseUi;
-    private void Awake()        // ΩÃ±€≈Ê
+    private void Awake()
     {
         if (instance == null)
         {
