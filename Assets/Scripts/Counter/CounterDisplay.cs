@@ -24,6 +24,7 @@ public class CounterDisplay : MonoBehaviour // 상품 계산 스크립트
         if (other.CompareTag("Player"))
         {
             if (!playerHand.isDessertHand) return;
+            GameManager.instance.player.Tuto(1);
             timer += Time.deltaTime;
             if (timer > 0.08f && (playerHand.playerHands[0].Count > 0 || playerHand.playerHands[1].Count > 0))
             {

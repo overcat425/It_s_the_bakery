@@ -12,6 +12,9 @@ public class CarScript : MonoBehaviour
     bool isHorn;
     public int[] requires; // 0은 도넛요구량, 1은 케이크요구량
     public int[] getDesserts;   // 받은 도넛/케이크
+    public Stack<Transform>[] carStack = new Stack<Transform>[2] { new Stack<Transform>(), new Stack<Transform>() };
+    public Transform[] carBaskets;  // 디저트 오브젝트 받을 위치
+
     private NavMeshAgent navMesh;
     void Start()
     {
@@ -29,6 +32,7 @@ public class CarScript : MonoBehaviour
         if (getDesserts[0] == requires[0] && getDesserts[1] == requires[1]) isFull++;
         if (isFull == 1)
         {
+            GameManager.instance.thruMoneyManager.DropMoney(getDesserts[0], getDesserts[1]);
             GameManager.instance.customerMoving.CarsShiftForward();
             isFull++;
             SoundManager.instance.PlaySound(SoundManager.Effect.Counter);
@@ -44,8 +48,15 @@ public class CarScript : MonoBehaviour
     {
         if (other.CompareTag("Destroy"))
         {
+
             for (int i = 0; i < getDesserts.Length; i++)
             {
+                int len = carStack[i].Count;
+                for(int j = 0; j < len; j++)
+                {
+                    Transform desserts = carStack[i].Pop();
+                    Destroy(desserts.gameObject);
+                }
                 getDesserts[i] = 0;
             }
             gameObject.SetActive(false);

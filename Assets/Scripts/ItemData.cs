@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemData : MonoBehaviour
 {
-    public enum ItemType { Doughnut, Cake }
+    public enum ItemType { Doughnut, Cake, Money }
     [Header("Info")]
     public ItemType itemType;
     public string itemName;

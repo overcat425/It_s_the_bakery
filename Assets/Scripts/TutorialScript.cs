@@ -28,7 +28,7 @@ public class TutorialScript : MonoBehaviour
     {
         OutOfScreen();
         Rotating();
-        if (num >= 7)
+        if (num >= 9)
         {
             notice.SetActive(false);
             gameObject.SetActive(false);
@@ -36,8 +36,8 @@ public class TutorialScript : MonoBehaviour
     }
     public void NextPosition()
     {
-        if (num >= 7) return;
-        //notice.transform.position = target[num].position + new Vector3(0, 2.5f, 0);
+        if (num >= 9) return;
+        notice.transform.position = target[num].position + new Vector3(0, 2.5f, 0);
         num++;
     }
     void Rotating()

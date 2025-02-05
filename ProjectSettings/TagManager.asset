@@ -14,7 +14,7 @@ TagManager:
   - Destroy
   - Seat
   - Thru
-  - GetCash
+  - Money
   layers:
   - Default
   - TransparentFX

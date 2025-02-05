@@ -13,7 +13,7 @@ public class TextScript : MonoBehaviour
     int currentIndex;
     bool init;
 
-    public enum TextType { Office = 7, Drive = 8}
+    public enum TextType { Office = 9, Drive = 10}
     private void Start()
     {
         tutorialText.gameObject.SetActive(true);
@@ -41,11 +41,11 @@ public class TextScript : MonoBehaviour
     public void ShowNextText()
     {
         currentIndex++;
-        if(currentIndex < 6)
+        if(currentIndex < 8)
         {
             StartCoroutine(TutorialText(currentIndex));
         }
-        else if(currentIndex == 6)
+        else if(currentIndex == 8)
         {
             StartCoroutine("TextEnd");
         }

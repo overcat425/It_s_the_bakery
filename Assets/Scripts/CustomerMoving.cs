@@ -13,14 +13,14 @@ public class CustomerMoving : MonoBehaviour
     public Transform carDestroyPoint;
 
     [Header("보행자")]
-    public List<Transform> counters = new List<Transform>();
-    public List<GameObject> customerObjects = new List<GameObject>();
-    public List<Transform> seats = new List<Transform>();
-    public List<GameObject> seatObjects = new List<GameObject>();
+    public List<Transform> counters = new List<Transform>();    // 보행자가 줄 서는 위치
+    public List<GameObject> customerObjects = new List<GameObject>();   // 줄 서있는 보행자
+    public List<Transform> seats = new List<Transform>();               // 보행자가 앉을 자리위치
+    public List<GameObject> seatObjects = new List<GameObject>();   // 앉아있는 보행자
 
     [Header("드라이브스루")]
-    public List<Transform> thru = new List<Transform>();
-    public List<GameObject> carObjects = new List<GameObject>();
+    public List<Transform> thru = new List<Transform>();        // 자동차가 줄 서있을 위치
+    public List<GameObject> carObjects = new List<GameObject>();    // 줄 서있는 자동차
     public bool isThruEnable;
 
     public Transform[] turn;
@@ -70,17 +70,15 @@ public class CustomerMoving : MonoBehaviour
             StartCoroutine("NoSeat");
         }
     }
-    public void FindSeat(GameObject cust)   // 좌석 찾아서 이동하는 메소드
+    public void FindSeat(GameObject cust)   // 랜덤좌석 찾아서 이동하는 메소드
     {
-        for (int i = 0; i < seats.Count; i++)
+        int rand = Random.Range(0, seats.Count);
+        if (seatObjects[rand] == null)
         {
-            if (seatObjects[i] == null)
-            {
-                seatObjects[i] = cust;
-                Destination(seatObjects[i], seats[i]);
-                break;
-            }
+            seatObjects[rand] = cust;
+            Destination(seatObjects[rand], seats[rand]);
         }
+        else if (seatObjects[rand] != null) FindSeat(cust);
     }
     public void CarsShiftForward()
     {
@@ -138,7 +136,7 @@ public class CustomerMoving : MonoBehaviour
             if (seatObjects[i] == null) seat++;
         }return seat;
     }
-    IEnumerator NoSeat()
+    IEnumerator NoSeat()    // 앉을 자리가 없으면 자리가 없어요 UI 표시
     {
         noSeat.SetActive(true);
         yield return new WaitForSeconds(3f);

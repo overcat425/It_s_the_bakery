@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CounterScript : MonoBehaviour  // 손님 요구사항을 맡는 스크립트(계산X)
 {
+    public enum CounterType { Counter, Thru }
+    public CounterType counterType;
     public GameObject[] requireInven;   // 손님이 요구하는 상품 Ui(전체추적용)
     public GameObject[] requireUi;      // 손님이 요구하는 상품별Ui
     public Text[] requireText;
@@ -13,8 +15,19 @@ public class CounterScript : MonoBehaviour  // 손님 요구사항을 맡는 스크립트(계�
     public Text[] carText;
     private void Update()
     {
-        if(GameManager.instance.customerMoving.customerObjects.Count >= 1)IsFirstObject();
-        if (GameManager.instance.customerMoving.carObjects.Count >= 1) IsFirstCar();
+        Selling();
+    }
+    void Selling()
+    {
+        switch (counterType)
+        {
+            case CounterType.Counter:
+                if (GameManager.instance.customerMoving.customerObjects.Count >= 1) IsFirstObject();
+                break;
+            case CounterType.Thru:
+                if (GameManager.instance.customerMoving.carObjects.Count >= 1) IsFirstCar();
+                break;
+        }
     }
     void IsFirstObject()        // 차례 된 손님의 상품 요구량 전시
     {

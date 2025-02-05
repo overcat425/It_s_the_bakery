@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &954125767742730091
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 718204410065089066}
+  m_Layer: 0
+  m_Name: DonutBasket
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &718204410065089066
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954125767742730091}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.95268804, z: -0, w: -0.30394986}
+  m_LocalPosition: {x: 0, y: 0.84999996, z: 0.105}
+  m_LocalScale: {x: 1.1428572, y: 1.142857, z: 1.1428572}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3031103142360745369}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1324153871658424520
 GameObject:
   m_ObjectHideFlags: 0
@@ -4857,6 +4888,8 @@ Transform:
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 718204410065089066}
+  - {fileID: 3979158306816288394}
   - {fileID: 3365941209147697705}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -4997,3 +5030,37 @@ MonoBehaviour:
   isFull: 0
   requires: 0000000000000000
   getDesserts: 0000000000000000
+  carBaskets:
+  - {fileID: 718204410065089066}
+  - {fileID: 3979158306816288394}
+--- !u!1 &8265146704108645225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3979158306816288394}
+  m_Layer: 0
+  m_Name: CakeBasket
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3979158306816288394
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8265146704108645225}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.95268804, z: -0, w: -0.30394986}
+  m_LocalPosition: {x: 0, y: 0.84999996, z: 0.105}
+  m_LocalScale: {x: 1.1428572, y: 1.142857, z: 1.1428572}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3031103142360745369}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
