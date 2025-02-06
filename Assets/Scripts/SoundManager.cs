@@ -35,7 +35,7 @@ public class SoundManager : MonoBehaviour
     {
         SoundManager.instance.PlayBgm(true);
     }
-    void Init()
+    void Init()     // 소리 초기화
     {
         GameObject bgmObject = new GameObject("BgmObject");
         bgmObject.transform.parent = transform;     // 사운드매니저 자식 오브젝트로 생성

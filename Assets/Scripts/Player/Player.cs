@@ -26,18 +26,10 @@ public class Player : MonoBehaviour
     {
         maxPlayerDesserts = 5;
         rigid = GetComponent<Rigidbody>();
-        //StartCoroutine("PlayerDesserts");
     }
     void Update()
     {
         Move();
-    }
-    IEnumerator PlayerDesserts()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(3f);
-        }
     }
     //void OnMove(InputValue value)
     //{
@@ -127,7 +119,8 @@ public class Player : MonoBehaviour
     }
     IEnumerator PlayerGetMoney(int stackCount, MoneyManager moneyManager)
     {
-        for(int i = 0; i < stackCount; i++)
+        SoundManager.instance.PlaySound(SoundManager.Effect.Click);
+        for (int i = 0; i < stackCount; i++)
         {
             Transform money = moneyManager.moneyStack.Pop();
             GameManager.instance.GetMoney(10);

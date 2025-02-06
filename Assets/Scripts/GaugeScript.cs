@@ -112,7 +112,7 @@ public class GaugeScript : MonoBehaviour
             case Gauge.Office:
                 cameraManager.CamCtrl(prop.transform, cameraManager.eventCams[1].transform);
                 yield return new WaitForSeconds(0.7f);
-                prop.transform.DOScale(scaleBigger, 1.2f).SetEase(Ease.OutElastic);
+                prop.transform.DOScale(scaleBigger, 1f).SetEase(Ease.OutElastic);
                 yield return new WaitForSeconds(1.5f);
                 cameraManager.CamCtrl(GameManager.instance.player.transform, cameraManager.cam.transform);
                 StartCoroutine(textScript.TextEffect(TextScript.TextType.Office));
@@ -123,9 +123,13 @@ public class GaugeScript : MonoBehaviour
                 GameManager.instance.customerMoving.isThruEnable = true;
                 break;
         }gameObject.transform.localScale = Vector3.zero;
-        GameManager.instance.tutorialScript.NextPosition();
-        GameManager.instance.textScript.ShowNextText();
+        NextTuto();
         nextSpawn.SetActive(true);
         Destroy(gameObject, 7f);
+    }
+    void NextTuto()
+    {
+        GameManager.instance.tutorialScript.NextPosition();
+        GameManager.instance.textScript.ShowNextText();
     }
 }

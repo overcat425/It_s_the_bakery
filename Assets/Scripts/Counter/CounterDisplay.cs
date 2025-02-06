@@ -28,21 +28,26 @@ public class CounterDisplay : MonoBehaviour // 상품 계산 스크립트
             timer += Time.deltaTime;
             if (timer > 0.08f && (playerHand.playerHands[0].Count > 0 || playerHand.playerHands[1].Count > 0))
             {
-                for (int i = 0; i < playerHand.playerHands.Length; i++)
-                {
-                    if (playerHand.playerHands[i].Count > 0)
-                    {
-                        float above = i == 0 ? 0.08f : 0.12f;
-                        Transform dessert = playerHand.playerHands[i].Pop();
-                        dessert.SetParent(counterBasket[i]);
-
-                        Vector3 pos = Vector3.up * disPlayDesserts[i].Count * above;
-                        dessert.DOLocalJump(pos, 1f, 0, 0.3f);
-                        dessert.localRotation = Quaternion.identity;
-                        disPlayDesserts[i].Push(dessert);
-                    }
-                }
+                MoveDessert();
                 timer = 0f;
+            }
+        }
+    }
+    void MoveDessert()
+    {
+        SoundManager.instance.PlaySound(SoundManager.Effect.Click);
+        for (int i = 0; i < playerHand.playerHands.Length; i++)
+        {
+            if (playerHand.playerHands[i].Count > 0)
+            {
+                float above = i == 0 ? 0.08f : 0.12f;
+                Transform dessert = playerHand.playerHands[i].Pop();
+                dessert.SetParent(counterBasket[i]);
+
+                Vector3 pos = Vector3.up * disPlayDesserts[i].Count * above;
+                dessert.DOLocalJump(pos, 1f, 0, 0.3f);
+                dessert.localRotation = Quaternion.identity;
+                disPlayDesserts[i].Push(dessert);
             }
         }
     }

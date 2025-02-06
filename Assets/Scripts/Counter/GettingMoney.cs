@@ -95,32 +95,21 @@ public class GettingMoney : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            switch (type)
-            {
-                case CounterType.Counter:
-                    isSelling = true;
-                    break;
-                case CounterType.Thru:
-                    isThruing = true;
-                    break;
-            }
-            spriteRenderer.DOColor(Color.cyan, 0.3f);
+            OnTrigger(other, true);
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            switch (type)
-            {
-                case CounterType.Counter:
-                    isSelling = false;
-                    break;
-                case CounterType.Thru:
-                    isThruing = false;
-                    break;
-            }
-            spriteRenderer.DOColor(Color.white, 0.3f);
+            OnTrigger(other, false);
         }
+    }
+    private void OnTrigger(Collider other, bool state)
+    {
+        isSelling = (type == CounterType.Counter) && state;
+        isThruing = (type == CounterType.Thru) && state;
+
+        spriteRenderer.DOColor(state ? Color.cyan : Color.white, 0.3f);
     }
 }

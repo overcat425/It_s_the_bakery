@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerHand : MonoBehaviour
 {
     public bool isDessertHand;
+    public bool isTrashHand;
     public bool isCarrying;
     public int maxPlayerDesserts;
     public Stack<Transform>[] playerHands  = new Stack<Transform>[2] { new Stack<Transform>(), new Stack<Transform>() };
@@ -17,11 +18,20 @@ public class PlayerHand : MonoBehaviour
     void Update()
     {
         maxPlayerDesserts = GameManager.instance.player.maxPlayerDesserts;
+        HandControll();
         Carrying();
+    }
+    void HandControll()
+    {
+        if (playerHands[0].Count <= 0 && playerHands[1].Count <= 0)
+        {
+            isDessertHand = false;
+            isTrashHand = false;
+        }
+        isCarrying = isDessertHand || isTrashHand;
     }
     void Carrying()
     {
-        isCarrying = playerHands[0].Count + playerHands[1].Count > 0 ? true : false;
         if (!isCarrying)
         {
             anim.SetBool("isCarry", false); anim.SetBool("isCarryMove", false);

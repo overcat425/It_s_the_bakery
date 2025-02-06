@@ -8,12 +8,11 @@ using UnityEngine.UI;
 
 public class StoveScript : MonoBehaviour
 {
-    public enum StoveType { Donut, Cake }
-    public StoveType stoveType;
     PlayerHand playerHand;
+    public enum StoveType { Donut, Cake }   // 디저트 종류
+    public StoveType stoveType;
 
-    public int stoveDesserts;
-    [SerializeField] Transform[] dessertsPlace = new Transform[4];      // 디저트 놓는곳
+    [SerializeField] Transform[] dessertsPlace = new Transform[4];      // 디저트 오브젝트 놓을 위치
     public Stack<Transform> dessertsStack = new Stack<Transform>(); //디저트 스택(정보저장)
     [SerializeField] GameObject[] dessertPrefab;        // 디저트 프리팹
     [SerializeField] GameObject dessertBasket;          // 디저트 하이어라키
@@ -34,11 +33,11 @@ public class StoveScript : MonoBehaviour
         }
         StartCoroutine(MakeDesserts(stoveType));
     }
-    private void LateUpdate()
-    {
-        stoveStack.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 3f, 0));
-        //BurgerUi();
-    }
+    //private void LateUpdate()
+    //{
+    //    //stoveStack.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 3f, 0));
+    //    //BurgerUi();
+    //}
     IEnumerator MakeDesserts( StoveType type)   // 오븐 타입에 따라 디저트 생성
     {
         GameObject prefab = type == StoveType.Donut ? dessertPrefab[0] : dessertPrefab[1];
@@ -65,26 +64,31 @@ public class StoveScript : MonoBehaviour
     //}
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.tag == "Player")
         {
-            if (dessertsStack.Count <= 0) return;   // 오븐에 아무것도 없으면 작동X
-            GameManager.instance.player.Tuto(0);
-            int i = stoveType == StoveType.Donut ? 0 : 1;
-            float above = stoveType == StoveType.Donut ? 0.08f : 0.12f;
+            if (dessertsStack.Count <= 0 || playerHand.isTrashHand) return;   // 오븐에 아무것도 없으면 작동X
+            GameManager.instance.player.Tuto(0);    // 튜토리얼
+            int i = stoveType == StoveType.Donut ? 0 : 1;   // 도넛이면 0, 케이크면 1
+            float above = stoveType == StoveType.Donut ? 0.08f : 0.12f; // 디저트별 세로간격(쌓는 용도)
             timer += Time.deltaTime;
-            if (timer > 0.08f && playerBaskets[i].childCount < playerHand.maxPlayerDesserts)
+            if (timer > 0.08f && playerBaskets[i].childCount < playerHand.maxPlayerDesserts) // 0.8초 간격
             {
-                Transform dessert = dessertsStack.Pop();
-                dessert.SetParent(playerBaskets[i]);
-                Vector3 pos = Vector3.zero + Vector3.up * playerHand.playerHands[i].Count * above;
-                dessert.DOLocalJump(pos, 1.0f, 0, 0.3f);
-
-                dessert.localRotation = Quaternion.identity;
-                playerHand.playerHands[i].Push(dessert);
-
-                playerHand.isDessertHand = true;
+                MoveDessert(i, above);
                 timer = 0f;
             }
         }
+    }
+    void MoveDessert(int i , float above)
+    {
+        SoundManager.instance.PlaySound(SoundManager.Effect.Click);
+        Transform dessert = dessertsStack.Pop();    // 오븐의 디저트를 Pop
+        dessert.SetParent(playerBaskets[i]);            // 플레이어의 자식으로 두고
+        Vector3 pos = Vector3.up * playerHand.playerHands[i].Count * above;//위치설정
+        dessert.DOLocalJump(pos, 1.0f, 0, 0.3f);    // 오븐에서 플레이어 손으로 DOJump
+
+        dessert.localRotation = Quaternion.identity;    // 회전값은 zero
+        playerHand.playerHands[i].Push(dessert);        // 플레이어 스택으로 Push
+
+        playerHand.isDessertHand = true;    // 플레이어가 디저트 들고있음 true
     }
 }

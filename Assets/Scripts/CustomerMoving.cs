@@ -57,16 +57,9 @@ public class CustomerMoving : MonoBehaviour
             noSeat.SetActive(false);
             GameObject firstObject = customerObjects[0];        // 첫번째 오브젝트 지정 후
             FindSeat(firstObject);  // 좌석으로 이동시키고
-            customerObjects.RemoveAt(0);  // 첫 번째 오브젝트를 리스트에서 제거
-            for (int i = 0; i < customerObjects.Count; i++)
-            {                   //  앞쪽으로 한 칸씩 이동(위치)
-                Destination(customerObjects[i], counters[i]);
-            }
-            if (customerObjects.Count > 0 && counters.Count > customerObjects.Count)
-            {           // 앞쪽으로 한 칸씩 이동(리스트번호)
-                Destination(customerObjects[customerObjects.Count - 1], counters[customerObjects.Count - 1]);
-            }
-        }else if(IsThereSeat() <= 0) {  // 자리 없으면 자리없음 말풍선 띄우기
+            Shift();    // 한칸씩 앞으로 이동
+        }else if(IsThereSeat() <= 0)    // 자리 없으면 자리없음 말풍선 띄우기
+        {
             StartCoroutine("NoSeat");
         }
     }
@@ -79,6 +72,47 @@ public class CustomerMoving : MonoBehaviour
             Destination(seatObjects[rand], seats[rand]);
         }
         else if (seatObjects[rand] != null) FindSeat(cust);
+    }
+    void Shift()
+    {
+        customerObjects.RemoveAt(0);  // 첫 번째 오브젝트를 리스트에서 제거
+        for (int i = 0; i < customerObjects.Count; i++)
+        {                   //  앞쪽으로 한 칸씩 이동(위치)
+            Destination(customerObjects[i], counters[i]);
+        }
+        if (customerObjects.Count > 0 && counters.Count > customerObjects.Count)
+        {           // 앞쪽으로 한 칸씩 이동(리스트번호)
+            Destination(customerObjects[customerObjects.Count - 1], counters[customerObjects.Count - 1]);
+        }
+    }
+    IEnumerator CustomersComing()       // 손님 생성 메소드
+    {
+        while (true)
+        {
+            float rand = Random.Range(5, 11);        // 5~10초 랜덤쿨타임
+            yield return new WaitForSeconds(rand);
+            if (customerObjects.Count < 8)
+            {
+                GameObject cust = GameManager.instance.customersPool.MakeBugy(0);
+                cust.transform.position = spawnPoint.position;
+                customerObjects.Add(cust);
+                Destination(cust, counters[customerObjects.Count - 1]);
+            }
+        }
+    }
+    int IsThereSeat()       // 앉을 자리 있는지 확인
+    {
+        int seat = 0;
+        for (int i = 0; i < seats.Count; i++)
+        {
+            if (seatObjects[i] == null) seat++;
+        }return seat;
+    }
+    IEnumerator NoSeat()    // 앉을 자리가 없으면 자리가 없어요 UI 표시
+    {
+        noSeat.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        ShiftObjectsForward();
     }
     public void CarsShiftForward()
     {
@@ -97,21 +131,6 @@ public class CustomerMoving : MonoBehaviour
             }
         }
     }
-    IEnumerator CustomersComing()       // 손님 생성 메소드
-    {
-        while (true)
-        {
-            float rand = Random.Range(4, 9);        // 4~8초 랜덤쿨타임
-            yield return new WaitForSeconds(rand);
-            if (customerObjects.Count < 8)
-            {
-                GameObject cust = GameManager.instance.customersPool.MakeBugy(0);
-                cust.transform.position = spawnPoint.position;
-                customerObjects.Add(cust);
-                Destination(cust, counters[customerObjects.Count - 1]);
-            }
-        }
-    }
     public IEnumerator CarsComing()
     {
         while (true)
@@ -127,19 +146,5 @@ public class CustomerMoving : MonoBehaviour
                 Destination(car, thru[carObjects.Count - 1]);
             }
         }
-    }
-    int IsThereSeat()       // 앉을 자리 있는지 확인
-    {
-        int seat = 0;
-        for (int i = 0; i < seats.Count; i++)
-        {
-            if (seatObjects[i] == null) seat++;
-        }return seat;
-    }
-    IEnumerator NoSeat()    // 앉을 자리가 없으면 자리가 없어요 UI 표시
-    {
-        noSeat.SetActive(true);
-        yield return new WaitForSeconds(3f);
-        ShiftObjectsForward();
     }
 }

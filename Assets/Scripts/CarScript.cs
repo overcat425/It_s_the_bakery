@@ -48,19 +48,20 @@ public class CarScript : MonoBehaviour
     {
         if (other.CompareTag("Destroy"))
         {
-
-            for (int i = 0; i < getDesserts.Length; i++)
-            {
-                int len = carStack[i].Count;
-                for(int j = 0; j < len; j++)
-                {
-                    Transform desserts = carStack[i].Pop();
-                    Destroy(desserts.gameObject);
-                }
-                getDesserts[i] = 0;
-            }
-            gameObject.SetActive(false);
+            CarFalse();
         }
+    }
+    void CarFalse()
+    {
+        for (int i = 0; i < getDesserts.Length; i++)
+        {
+            int len = carStack[i].Count;
+            for(int j = 0; j < len; j++)
+            {
+                Transform desserts = carStack[i].Pop();
+                Destroy(desserts.gameObject);
+            }getDesserts[i] = 0;
+        }gameObject.SetActive(false);
     }
     void InitTakeOut()     // 드라이브스루 주문량 0~4인데 둘다 0이면 리롤
     {

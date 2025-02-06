@@ -19,8 +19,10 @@ public class MoneyManager : MonoBehaviour
     {
         for (int i = 0; i < donut*3 + cake*6; i++)
         {
-            GameObject money = GameManager.instance.customersPool.MakeBugy(5);
-            money.transform.position = new Vector3(moneyPlace[moneyStack.Count % 8].position.x, moneyPlace[moneyStack.Count % 8].position.y +((moneyStack.Count / 8)*0.07f), moneyPlace[moneyStack.Count % 8].position.z);
+            GameObject money = GameManager.instance.customersPool.MakeBugy(5);  // µ· ÇÁ¸®ÆÕ
+            money.transform.position = new Vector3(moneyPlace[moneyStack.Count % 8].position.x,
+            moneyPlace[moneyStack.Count % 8].position.y +((moneyStack.Count / 8)*0.07f),
+            moneyPlace[moneyStack.Count % 8].position.z);
             ItemData moneyItem = money.GetComponent<ItemData>();
             moneyStack.Push(moneyItem.transform);
         }

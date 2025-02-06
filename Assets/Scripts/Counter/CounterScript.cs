@@ -19,13 +19,14 @@ public class CounterScript : MonoBehaviour  // ¼Õ´Ô ¿ä±¸»çÇ×À» ¸Ã´Â ½ºÅ©¸³Æ®(°è»
     }
     void Selling()
     {
+        CustomerMoving customerMoving = GameManager.instance.customerMoving;
         switch (counterType)
         {
             case CounterType.Counter:
-                if (GameManager.instance.customerMoving.customerObjects.Count >= 1) IsFirstObject();
+                if (customerMoving.customerObjects.Count >= 1) IsFirstObject();
                 break;
             case CounterType.Thru:
-                if (GameManager.instance.customerMoving.carObjects.Count >= 1) IsFirstCar();
+                if (customerMoving.carObjects.Count >= 1) IsFirstCar();
                 break;
         }
     }
@@ -41,7 +42,7 @@ public class CounterScript : MonoBehaviour  // ¼Õ´Ô ¿ä±¸»çÇ×À» ¸Ã´Â ½ºÅ©¸³Æ®(°è»
             for (int k = 0; k < requireUi.Length; k++)
             {
                 bool isUiHide = customerScript.requires[k] - customerScript.getDesserts[k] > 0 ? false : true;
-                requireUi[k].gameObject.SetActive(!isUiHide);
+                requireUi[k].SetActive(!isUiHide);
             }
             for (int i = 0; i < requireText.Length; i++)
             {
@@ -62,7 +63,7 @@ public class CounterScript : MonoBehaviour  // ¼Õ´Ô ¿ä±¸»çÇ×À» ¸Ã´Â ½ºÅ©¸³Æ®(°è»
             for (int k = 0; k < carUi.Length; k++)
             {
                 bool isUiHide = carScript.requires[k] - carScript.getDesserts[k] > 0 ? false : true;
-                carUi[k].gameObject.SetActive(!isUiHide);
+                carUi[k].SetActive(!isUiHide);
             }
             for (int i = 0; i < carText.Length; i++)
             {

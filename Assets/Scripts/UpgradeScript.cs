@@ -33,7 +33,7 @@ public class UpgradeScript : MonoBehaviour
     {
         levels = Enumerable.Repeat(1,4).ToArray();
         bakeSpeed = 5;
-        moveSpeed = 10;
+        moveSpeed = 3;
         stoveLevel = 1;
         maxLevel = 3;
     }
@@ -111,13 +111,14 @@ public class UpgradeScript : MonoBehaviour
     }
     public IEnumerator EnableStove(GameObject stove)
     {
+        CameraManager cameraManager = GameManager.instance.cameraManager; ;
         UpgradeOff();
-        GameManager.instance.cameraManager.CamCtrl(stove.transform, GameManager.instance.cameraManager.eventCams[0].transform);
+        cameraManager.CamCtrl(stove.transform, cameraManager.eventCams[0].transform);
         yield return new WaitForSeconds(1f);
         SoundManager.instance.PlaySound(SoundManager.Effect.Scale);
         stove.SetActive(true);
         stove.transform.DOScale(stoveScale, 0.6f).SetEase(Ease.OutElastic);
         yield return new WaitForSeconds(0.8f);
-        GameManager.instance.cameraManager.CamCtrl(GameManager.instance.player.transform, GameManager.instance.cameraManager.cam.transform);
+        cameraManager.CamCtrl(GameManager.instance.player.transform, cameraManager.cam.transform);
     }
 }
