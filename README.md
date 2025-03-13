@@ -10,3 +10,6 @@
 ● DoTween을 이용한 디저트 및 지폐 오브젝트 이동 구현<br>
 ● Particle System을 이용한 자동차 매연 구현<br><br>
 플레이 영상 URL : https://www.youtube.com/watch?v=HrvqBFYWfhM <br><br><br>
+
+![Image](https://github.com/user-attachments/assets/360434c2-3348-4124-9509-5f203a2d6b7e)<br><br>
+![Image](https://github.com/user-attachments/assets/8975a301-dc86-4981-8e78-37ad0a41abe9)
