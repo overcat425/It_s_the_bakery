@@ -6,7 +6,6 @@ using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("인스턴스")]
     public static GameManager instance;
 
     [Header("스크립트")]

@@ -93,10 +93,10 @@ public class CustomerMoving : MonoBehaviour
             yield return new WaitForSeconds(rand);
             if (customerObjects.Count < 8)
             {
-                GameObject cust = GameManager.instance.customersPool.MakeBugy(0);
+                GameObject cust = GameManager.instance.customersPool.MakeBugy(0); // 오브젝트 프리팹 생성
                 cust.transform.position = spawnPoint.position;
-                customerObjects.Add(cust);
-                Destination(cust, counters[customerObjects.Count - 1]);
+                customerObjects.Add(cust);                                      // 오브젝트 풀링 리스트에 등록
+                Destination(cust, counters[customerObjects.Count - 1]); // 카운터로 가서 주문하도록 설정
             }
         }
     }

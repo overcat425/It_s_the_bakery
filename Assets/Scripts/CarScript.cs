@@ -29,14 +29,7 @@ public class CarScript : MonoBehaviour
     private void Update()
     {
         isMoving = navMesh.remainingDistance <= 0.05f ? false : true;
-        if (getDesserts[0] == requires[0] && getDesserts[1] == requires[1]) isFull++;
-        if (isFull == 1)
-        {
-            GameManager.instance.thruMoneyManager.DropMoney(getDesserts[0], getDesserts[1]);
-            GameManager.instance.customerMoving.CarsShiftForward();
-            isFull++;
-            SoundManager.instance.PlaySound(SoundManager.Effect.Counter);
-        }
+        IsFull();
         if(isRequesting && !isHorn)
         {
             isHorn = true;
@@ -49,6 +42,17 @@ public class CarScript : MonoBehaviour
         if (other.CompareTag("Destroy"))
         {
             CarFalse();
+        }
+    }
+    void IsFull()   // 요구 디저트 충족
+    {
+        if (getDesserts[0] == requires[0] && getDesserts[1] == requires[1]) isFull++;
+        if (isFull == 1)
+        {
+            GameManager.instance.thruMoneyManager.DropMoney(getDesserts[0], getDesserts[1]);
+            GameManager.instance.customerMoving.CarsShiftForward();
+            isFull++;
+            SoundManager.instance.PlaySound(SoundManager.Effect.Counter);
         }
     }
     void CarFalse()

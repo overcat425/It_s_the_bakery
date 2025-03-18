@@ -52,7 +52,7 @@ public class TutorialScript : MonoBehaviour
             yield return notice.transform.DOMoveY(notice.transform.position.y - 1, 1f).SetEase(Ease.InOutSine).WaitForCompletion();
         }
     }
-    void OutOfScreen()
+    void OutOfScreen()  // 목적지가 화면 밖으로 나갔을 때
     {
         if (notice.GetComponent<Renderer>().isVisible)
         {

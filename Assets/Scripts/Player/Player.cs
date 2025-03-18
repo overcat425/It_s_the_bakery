@@ -37,11 +37,11 @@ public class Player : MonoBehaviour
     //}
     void Move()
     {
-        camY = Camera.main.transform.eulerAngles.y;     // 카메라 -45 회전에 대한 해결책
-        Quaternion camRot = Quaternion.Euler(0f, camY, 0f);     // 카메라의 Y축만 받은 뒤,
+        camY = Camera.main.transform.eulerAngles.y;   // 카메라 -45 회전에 대한 해결책
+        Quaternion camRot = Quaternion.Euler(0f, camY, 0f);   // 카메라의 Y축만 받은 뒤,
         speed = (2 + GameManager.instance.upgradeScript.moveSpeed * 0.3f);
         inputVec = GameManager.instance.joystickScript.inputVec;
-        moveVec = camRot *  new Vector3(inputVec.x, 0, inputVec.y);            // 플레이어의 이동값에 곱해줌
+        moveVec = camRot *  new Vector3(inputVec.x, 0, inputVec.y);   // 플레이어의 이동값에 곱해줌
         transform.position += moveVec * speed * Time.deltaTime;
         transform.LookAt(moveVec+transform.position);
     }
@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
     //}
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Money"))
+        if (other.gameObject.CompareTag("Money"))   // 돈 획득
         {
             MoneyManager moneyManager = other.GetComponentInParent<MoneyManager>();
             int stackCount = moneyManager.moneyStack.Count;
@@ -122,10 +122,10 @@ public class Player : MonoBehaviour
         SoundManager.instance.PlaySound(SoundManager.Effect.Click);
         for (int i = 0; i < stackCount; i++)
         {
-            Transform money = moneyManager.moneyStack.Pop();
-            GameManager.instance.GetMoney(10);
+            Transform money = moneyManager.moneyStack.Pop();    // money 스택에서 Pop
+            GameManager.instance.GetMoney(10);          // 돈 획득
             money.gameObject.SetActive(false);
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.01f);     // 돈 획득 간격
         }
         Tuto(3);
     }
@@ -155,7 +155,7 @@ public class Player : MonoBehaviour
     //        }
     //    }
     //}
-    public void Tuto(int i)
+    public void Tuto(int i)     // 튜토리얼
     {
         if (isTuto[i] == false)
         {

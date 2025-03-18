@@ -23,6 +23,9 @@ public class MoneyManager : MonoBehaviour
             money.transform.position = new Vector3(moneyPlace[moneyStack.Count % 8].position.x,
             moneyPlace[moneyStack.Count % 8].position.y +((moneyStack.Count / 8)*0.07f),
             moneyPlace[moneyStack.Count % 8].position.z);
+            /* 돈 프리팹의 1개 층은 2x4로 8개이며, x좌표와 z좌표는 8로 나눈 나머지를 구해
+             1~8까지 반복하고,  y좌표는 8로 나눠 층 수를 계산함. */
+
             ItemData moneyItem = money.GetComponent<ItemData>();
             moneyStack.Push(moneyItem.transform);
         }

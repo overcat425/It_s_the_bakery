@@ -43,18 +43,18 @@ public class StoveScript : MonoBehaviour
         GameObject prefab = type == StoveType.Donut ? dessertPrefab[0] : dessertPrefab[1];
         while (true)
         {
-            speed = GameManager.instance.upgradeScript.bakeSpeed;
+            speed = GameManager.instance.upgradeScript.bakeSpeed;   // 업그레이드 가능한 생산속도
             yield return new WaitForSecondsRealtime(speed);
-            if(dessertBasket.transform.childCount < maxStove)
+            if(dessertBasket.transform.childCount < maxStove)   // 오븐이 꽉 찬 상태가 아니면 디저트 생산
             {
                 GameObject dessert = Instantiate(prefab, new Vector3(transform.position.x, -3f, transform.position.z), Quaternion.identity, dessertBasket.transform); ;
-                dessert.transform.DOJump(new Vector3(dessertsPlace[dessertBasket.transform.childCount-1].position.x, dessertsPlace[dessertBasket.transform.childCount-1].position.y, dessertsPlace[dessertBasket.transform.childCount-1].position.z), 1f, 1, 0.2f).SetEase(Ease.OutQuad);
-                ItemData dessertItem = dessert.GetComponent<ItemData>(); ;
-                dessertsStack.Push(dessertItem.transform);
+                dessert.transform.DOJump(new Vector3(dessertsPlace[dessertBasket.transform.childCount - 1].position.x, dessertsPlace[dessertBasket.transform.childCount - 1].position.y, dessertsPlace[dessertBasket.transform.childCount - 1].position.z), 1f, 1, 0.2f).SetEase(Ease.OutQuad);     // 디저트가 목표 오브젝트로 점프하는 연출
+                ItemData dessertItem = dessert.GetComponent<ItemData>(); ;     // 디저트의 정보를 ItemData에서 가져와서
+                dessertsStack.Push(dessertItem.transform);                               // dessertsStack 스택에 Push()
             }
         }
     }
-    //void BurgerUi()
+    //void BurgerUi()           // 오븐 디저트 스택UI
     //{
     //    if (dessertsStack.Count > 0)
     //    {
@@ -68,27 +68,27 @@ public class StoveScript : MonoBehaviour
         {
             if (dessertsStack.Count <= 0 || playerHand.isTrashHand) return;   // 오븐에 아무것도 없으면 작동X
             GameManager.instance.player.Tuto(0);    // 튜토리얼
-            int i = stoveType == StoveType.Donut ? 0 : 1;   // 도넛이면 0, 케이크면 1
-            float above = stoveType == StoveType.Donut ? 0.08f : 0.12f; // 디저트별 세로간격(쌓는 용도)
-            timer += Time.deltaTime;
-            if (timer > 0.08f && playerBaskets[i].childCount < playerHand.maxPlayerDesserts) // 0.8초 간격
-            {
-                MoveDessert(i, above);
-                timer = 0f;
-            }
+            MoveDessert();
         }
     }
-    void MoveDessert(int i , float above)
+    void MoveDessert()
     {
-        SoundManager.instance.PlaySound(SoundManager.Effect.Click);
-        Transform dessert = dessertsStack.Pop();    // 오븐의 디저트를 Pop
-        dessert.SetParent(playerBaskets[i]);            // 플레이어의 자식으로 두고
-        Vector3 pos = Vector3.up * playerHand.playerHands[i].Count * above;//위치설정
-        dessert.DOLocalJump(pos, 1.0f, 0, 0.3f);    // 오븐에서 플레이어 손으로 DOJump
+        int i = stoveType == StoveType.Donut ? 0 : 1;   // 도넛이면 0, 케이크면 1
+        float above = stoveType == StoveType.Donut ? 0.08f : 0.12f; // 디저트별 세로간격(쌓는 용도)
+        timer += Time.deltaTime;
+        if (timer > 0.08f && playerBaskets[i].childCount < playerHand.maxPlayerDesserts) // 0.8초 간격
+        {
+            SoundManager.instance.PlaySound(SoundManager.Effect.Click);
+            Transform dessert = dessertsStack.Pop();    // 오븐의 디저트를 Pop
+            dessert.SetParent(playerBaskets[i]);            // 플레이어의 자식으로 두고
+            Vector3 pos = Vector3.up * playerHand.playerHands[i].Count * above;  //위치설정
+            dessert.DOLocalJump(pos, 1.0f, 0, 0.3f);    // 오븐에서 플레이어 손으로 DOJump
 
-        dessert.localRotation = Quaternion.identity;    // 회전값은 zero
-        playerHand.playerHands[i].Push(dessert);        // 플레이어 스택으로 Push
+            dessert.localRotation = Quaternion.identity;    // 회전값은 zero
+            playerHand.playerHands[i].Push(dessert);        // 플레이어 스택으로 Push
 
-        playerHand.isDessertHand = true;    // 플레이어가 디저트 들고있음 true
+            playerHand.isDessertHand = true;    // 플레이어가 디저트 들고있음 true
+            timer = 0f;
+        }
     }
 }

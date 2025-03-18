@@ -6,7 +6,7 @@ using UnityEngine;
 public class CounterDisplay : MonoBehaviour // 상품 계산 스크립트
 {
     PlayerHand playerHand;
-    public Stack<Transform>[] disPlayDesserts = new Stack<Transform>[2] { new Stack<Transform>(), new Stack<Transform>() };
+    public Stack<Transform>[] disPlayDesserts = new Stack<Transform>[2]{ new Stack<Transform>(), new Stack<Transform>() };
     public Transform[] counterBasket = new Transform[2];
 
     [SerializeField] GameObject placeTrans;

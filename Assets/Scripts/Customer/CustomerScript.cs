@@ -40,16 +40,7 @@ public class CustomerScript : MonoBehaviour
     void Update()
     {
         MoveOrNot();
-        if (getDesserts[0] == requires[0] && getDesserts[1] == requires[1]) isFull++;
-        if (isFull == 1)    // 디저트 다 받았을 때
-        {
-            GameManager.instance.moneyManager.DropMoney(getDesserts[0], getDesserts[1]);
-            GameManager.instance.customerMoving.ShiftObjectsForward();
-            isFull++;
-            SoundManager.instance.PlaySound(SoundManager.Effect.Counter);
-            GameManager.instance.player.Tuto(2);
-            //GameManager.instance.customerMoving.Destination(gameObject, GameManager.instance.customerMoving.seats[0]);//destroyPoint);
-        }
+        CheckIsFull();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -64,6 +55,19 @@ public class CustomerScript : MonoBehaviour
             chairScript = other.GetComponent<ChairScript>();
         }
     }
+    void CheckIsFull()
+    {
+        if (getDesserts[0] == requires[0] && getDesserts[1] == requires[1]) isFull++;
+        if (isFull == 1)    // 디저트 다 받았을 때
+        {
+            GameManager.instance.moneyManager.DropMoney(getDesserts[0], getDesserts[1]);
+            GameManager.instance.customerMoving.ShiftObjectsForward();
+            isFull++;
+            SoundManager.instance.PlaySound(SoundManager.Effect.Counter);
+            GameManager.instance.player.Tuto(2);
+            //GameManager.instance.customerMoving.Destination(gameObject, GameManager.instance.customerMoving.seats[0]);//destroyPoint);
+        }
+    }
     public void MoveOrNot()     // 걷기,정지 애니메이션 컨트롤
     {
         isMoving = navMesh.remainingDistance <= 0.05f ? false : true;
@@ -71,22 +75,24 @@ public class CustomerScript : MonoBehaviour
     }
     void InitRequire()     // 상품 요구량 메소드 ; 0~3인데 둘다 0이면 리롤
     {
+        int stoveLevel = GameManager.instance.upgradeScript.stoveLevel;
         isRequesting = false;
-        if (GameManager.instance.upgradeScript.stoveLevel < 3)
+        switch (stoveLevel)
         {
-            requires[0] = Random.Range(1, 4);
-        }
-        else if (GameManager.instance.upgradeScript.stoveLevel >= 3)
-        {
-            requires = requires.Select(x => Random.Range(1, 4)).ToArray();
+            case 3:         // 만렙일 때
+                requires = requires.Select(x => Random.Range(1, 4)).ToArray();
+                break;
+            default:        // 만렙 아닐 때
+                requires[0] = Random.Range(1, 4);
+                break;
         }
         if (requires[0] <= 0 && requires[1]<=0) InitRequire();
     }
     IEnumerator EatingTime()        // 먹는 동작
     {                                                                            
         CustomerMoving customerMoving = GameManager.instance.customerMoving;
-        int index = customerMoving.seatObjects.IndexOf(gameObject);  // 앉을 자리번호 선택
-        LookAtTable(index); //SitOn(index);
+        int index = customerMoving.seatObjects.IndexOf(gameObject);  // 앉은 자리번호를 읽고
+        LookAtTable(index);                                          // 테이블을 바라보도록 함
 
         yield return StartCoroutine(SitDown()); // 앉는 애니메이션
 

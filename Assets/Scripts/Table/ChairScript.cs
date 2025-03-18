@@ -24,32 +24,36 @@ public class ChairScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)     // 자리에 앉는 오브젝트가 가지고있는 디저트 수를 받아서 식탁에 내려놓음
     {
         GameObject cust = other.gameObject;
-        CustomerScript customerScript = cust.GetComponent<CustomerScript>();
         if(other.CompareTag("Customer"))//&&customerScript.isEating == false)
         {
-            CustomerHand customerHand = cust.GetComponent<CustomerHand>();
-            StartCoroutine(EatFood(customerScript.getDesserts, customerScript.eatingTime));
-            while (customerHand.customerHands[0].Count > 0 || customerHand.customerHands[1].Count > 0)
-            {
-                for (int i = 0; i < customerHand.customerHands.Length; i++)
-                {
-                    if (customerHand.customerHands[i].Count > 0)
-                    {
-                        float above = i == 0 ? 0.08f : 0.12f;
-                        Transform dessert = customerHand.customerHands[i].Pop();
-                        dessert.SetParent(chairBasket[i]);
-
-                        Vector3 pos = Vector3.up * chairDesserts[i].Count * above;
-                        dessert.DOLocalJump(pos, 1f, 0, 0.3f);
-                        dessert.localRotation = Quaternion.identity;
-                        chairDesserts[i].Push(dessert);
-                    }
-                }
-            }
+            DropDessertsToDesk(cust);
         }
         if (other.CompareTag("Player") && isTrash && !playerHand.isDessertHand)
         {
             CleanTrash();
+        }
+    }
+    void DropDessertsToDesk(GameObject cust)
+    {
+        CustomerScript customerScript = cust.GetComponent<CustomerScript>();
+        CustomerHand customerHand = cust.GetComponent<CustomerHand>();
+        StartCoroutine(EatFood(customerScript.requires, customerScript.eatingTime));
+        while (customerHand.customerHands[0].Count > 0 || customerHand.customerHands[1].Count > 0)
+        {
+            for (int i = 0; i < customerHand.customerHands.Length; i++)
+            {
+                if (customerHand.customerHands[i].Count > 0)
+                {
+                    float above = i == 0 ? 0.08f : 0.12f;
+                    Transform dessert = customerHand.customerHands[i].Pop();
+                    dessert.SetParent(chairBasket[i]);
+
+                    Vector3 pos = Vector3.up * chairDesserts[i].Count * above;
+                    dessert.DOLocalJump(pos, 1f, 0, 0.3f);
+                    dessert.localRotation = Quaternion.identity;
+                    chairDesserts[i].Push(dessert);
+                }
+            }
         }
     }
     IEnumerator EatFood(int[] desserts, int time)   // 손님이 먹으면서 디저트오브젝트 소멸

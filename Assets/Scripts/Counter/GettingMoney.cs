@@ -90,7 +90,6 @@ public class GettingMoney : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         isGetting = false;
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

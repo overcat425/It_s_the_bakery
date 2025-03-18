@@ -17,19 +17,19 @@ public class JoystickScript : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     {
         radius = 50f;
     }
-    public void OnPointerDown(PointerEventData eventData)   // 터치 시
+    public void OnPointerDown(PointerEventData eventData)   // 터치 다운
     {
-        joystick.position = eventData.position;
-        joystick.gameObject.SetActive(true);
+        joystick.position = eventData.position; // 터치된 좌표를 받아
+        joystick.gameObject.SetActive(true);        // 조이스틱 true
         startPos = eventData.position;
     }
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData) // 터치 업
     {
         joystick.gameObject.SetActive(false);
         handle.anchoredPosition = Vector2.zero;
         inputVec = Vector2.zero;
     }
-    public void OnDrag(PointerEventData eventData)
+    public void OnDrag(PointerEventData eventData)  // 터치 후 드래그
     {
         Vector2 dir = eventData.position - startPos;
         float dist = Mathf.Min(dir.magnitude, radius);

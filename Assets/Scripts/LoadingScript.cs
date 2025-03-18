@@ -36,7 +36,7 @@ public class LoadingScript : MonoBehaviour
             Destroy(gameObject); return;
         }DontDestroyOnLoad(gameObject);
     }
-    private static LoadingScript Init() // Resource폴더의 로딩캔버스 프리팹을 인스턴스화함.
+    private static LoadingScript Init() // Resource폴더의 로딩Ui 프리팹을 생성함.
     {
         return Instantiate(Resources.Load<LoadingScript>("LoadingUi"));
     }
@@ -54,23 +54,23 @@ public class LoadingScript : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         gameObject.SetActive(true);
-        SceneManager.sceneLoaded += OnSceneLoadFinished;
+        SceneManager.sceneLoaded += OnSceneLoadFinished;    // 씬 로드 완료하면 이벤트 추가
         loadScene = sceneName;
         StartCoroutine("LoadSceneCo");
     }
 
-    IEnumerator LoadSceneCo()   // 씬을 로드하는 동안 슬라이더 채워지는 효과
+    IEnumerator LoadSceneCo()   // 비동기 씬 로딩 시작
     {
         slider.value = 0f;
-        yield return StartCoroutine(Fade(true));
+        yield return StartCoroutine(Fade(true));        // 페이드 인 시작
         AsyncOperation operation = SceneManager.LoadSceneAsync(loadScene);
-        operation.allowSceneActivation = false;
+        operation.allowSceneActivation = false; // 로딩이 다 될때까지 씬 이동 X
         float time = 0f;
         while (!operation.isDone)   // 로딩이 너무 빨리 채워지면 안되기 때문에
         {                                   // 90%가 다 차면 1초동안은 남은 10% 채우도록 함
             if (operation.progress < 0.9f)
             {
-                slider.value = operation.progress;
+                slider.value = operation.progress;  // 슬라이더로 진행상황 전시
             }
             else
             {

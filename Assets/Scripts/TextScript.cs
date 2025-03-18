@@ -21,7 +21,7 @@ public class TextScript : MonoBehaviour
         StartCoroutine("TextMoving");
         StartCoroutine(TutorialText(currentIndex));
     }
-    public IEnumerator TextEffect(TextType textType)
+    public IEnumerator TextEffect(TextType textType)    // 텍스트 효과
     {
         tutorialText.text = scriptData.scriptTexts[(int)textType].text;
         float time = Time.time;
@@ -29,15 +29,15 @@ public class TextScript : MonoBehaviour
         tutorialText.gameObject.SetActive(true);
         while (Time.time - time < 5f)
         {
-            TextEvent(distance);
-            TextEvent(-distance);
+            yield return TextEvent(distance);
+            yield return TextEvent(-distance);
         }
         tutorialText.gameObject.SetActive(false);
         yield return null;
     }
-    void TextEvent(float yPos)
+    IEnumerator TextEvent(float yPos)
     {
-        tutorialText.transform.DOMoveY(tutorialText.transform.position.y + yPos, 1f).SetEase(Ease.InOutSine).WaitForCompletion();
+        yield return tutorialText.transform.DOMoveY(tutorialText.transform.position.y + yPos, 1f).SetEase(Ease.InOutSine).WaitForCompletion();
     }
     IEnumerator TutorialText(int index)
     {
