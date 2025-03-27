@@ -48,18 +48,18 @@ public class GettingMoney : MonoBehaviour
         CustomerHand customerHand = yourTurn.GetComponent<CustomerHand>();
         CustomerScript customerScript = yourTurn.GetComponent<CustomerScript>();
 
-        for (int i = 0; i < customerHand.customerHands.Length; i++)
+        for (int i = 0; i < customerHand.hands.Length; i++)
         {
-            if (customerHand.customerHands[i].Count < customerScript.requires[i]&& disPlay.disPlayDesserts[i].Count >0 &&customerScript.isRequesting)
+            if (customerHand.hands[i].Count < customerScript.requires[i]&& disPlay.disPlayDesserts[i].Count >0 &&customerScript.isRequesting)
             {
                 float above = i == 0 ? 0.08f : 0.13f;
                 Transform dessert = disPlay.disPlayDesserts[i].Pop();
                 dessert.SetParent(customerScript.customerBaskets[i]);
 
-                Vector3 pos = Vector3.up * customerHand.customerHands[i].Count *above;
+                Vector3 pos = Vector3.up * customerHand.hands[i].Count *above;
                 dessert.DOLocalJump(pos, 1f, 0, 0.3f);
                 dessert.localRotation = Quaternion.identity;
-                customerHand.customerHands[i].Push(dessert);
+                customerHand.hands[i].Push(dessert);
                 customerScript.getDesserts[i]++;
             }
         }

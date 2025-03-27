@@ -81,11 +81,11 @@ public class StoveScript : MonoBehaviour
             SoundManager.instance.PlaySound(SoundManager.Effect.Click);
             Transform dessert = dessertsStack.Pop();    // 오븐의 디저트를 Pop
             dessert.SetParent(playerBaskets[i]);            // 플레이어의 자식으로 두고
-            Vector3 pos = Vector3.up * playerHand.playerHands[i].Count * above;  //위치설정
+            Vector3 pos = Vector3.up * playerHand.hands[i].Count * above;  //위치설정
             dessert.DOLocalJump(pos, 1.0f, 0, 0.3f);    // 오븐에서 플레이어 손으로 DOJump
 
             dessert.localRotation = Quaternion.identity;    // 회전값은 zero
-            playerHand.playerHands[i].Push(dessert);        // 플레이어 스택으로 Push
+            playerHand.hands[i].Push(dessert);        // 플레이어 스택으로 Push
 
             playerHand.isDessertHand = true;    // 플레이어가 디저트 들고있음 true
             timer = 0f;

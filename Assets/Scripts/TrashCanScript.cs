@@ -24,10 +24,10 @@ public class TrashCanScript : MonoBehaviour
         {
             if (!playerHand.isTrashHand) return;
             timer += Time.deltaTime;
-            if (timer > 0.05f && playerHand.playerHands[0].Count > 0)
+            if (timer > 0.05f && playerHand.hands[0].Count > 0)
             {
                 SoundManager.instance.PlaySound(SoundManager.Effect.Click);
-                Transform trash = playerHand.playerHands[0].Pop();
+                Transform trash = playerHand.hands[0].Pop();
                 trash.SetParent(trashBasket);
 
                 Vector3 pos = Vector3.zero;

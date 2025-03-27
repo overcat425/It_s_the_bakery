@@ -38,14 +38,14 @@ public class ChairScript : MonoBehaviour
         CustomerScript customerScript = cust.GetComponent<CustomerScript>();
         CustomerHand customerHand = cust.GetComponent<CustomerHand>();
         StartCoroutine(EatFood(customerScript.requires, customerScript.eatingTime));
-        while (customerHand.customerHands[0].Count > 0 || customerHand.customerHands[1].Count > 0)
+        while (customerHand.hands[0].Count > 0 || customerHand.hands[1].Count > 0)
         {
-            for (int i = 0; i < customerHand.customerHands.Length; i++)
+            for (int i = 0; i < customerHand.hands.Length; i++)
             {
-                if (customerHand.customerHands[i].Count > 0)
+                if (customerHand.hands[i].Count > 0)
                 {
                     float above = i == 0 ? 0.08f : 0.12f;
-                    Transform dessert = customerHand.customerHands[i].Pop();
+                    Transform dessert = customerHand.hands[i].Pop();
                     dessert.SetParent(chairBasket[i]);
 
                     Vector3 pos = Vector3.up * chairDesserts[i].Count * above;
@@ -92,10 +92,10 @@ public class ChairScript : MonoBehaviour
         SoundManager.instance.PlaySound(SoundManager.Effect.Click);
         Transform trash = chairDesserts[0].Pop();
         trash.SetParent(playerBaskets[0]);
-        Vector3 pos = Vector3.up * playerHand.playerHands[0].Count * 0.13f;
+        Vector3 pos = Vector3.up * playerHand.hands[0].Count * 0.13f;
         trash.DOLocalJump(pos, 1f, 0, 0.3f);
         trash.localRotation = Quaternion.identity;
-        playerHand.playerHands[0].Push(trash);
+        playerHand.hands[0].Push(trash);
         playerHand.isTrashHand = true;
         isTrash = false;
         GameManager.instance.customerMoving.seatObjects[chairNum] = null;
