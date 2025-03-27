@@ -4,35 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
-public class CustomerScript : MonoBehaviour
+public class CustomerScript : Consumer
 {
     ChairScript chairScript;
     //public Transform homeTrans;
-    public bool isMoving;       // 이동하고 있는지
-    public bool isRequesting;   // 손님이 도착해서 주문하기도 전에 갖다주는 케이스 방지
     public bool isEating;       // 좌석에 도착해서 먹기 시작
-    public int isFull;              // 디저트 요구사항 충족
     bool isGetting;
-    public int[] requires; // 0은 도넛요구량, 1은 케이크요구량
-    public int[] getDesserts;   // 받은 디저트 (수치)
-    public Transform[] customerBaskets; // 디저트 오브젝트 받을 위치
     public int eatingTime;          // 먹는 시간 랜덤
-    private NavMeshAgent navMesh;   // 이동경로
     Rigidbody rigid;
     public Animator anim;
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         rigid = GetComponent<Rigidbody>();
-        navMesh = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
     }
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         isEating = false;
-        isMoving = true;
-        isFull = 0;
         InitRequire();
         eatingTime = Random.Range(20, 30);
     }
@@ -54,9 +45,9 @@ public class CustomerScript : MonoBehaviour
             chairScript = other.GetComponent<ChairScript>();
         }
     }
-    void CheckIsFull()
+    protected override void CheckIsFull()
     {
-        if (getDesserts[0] == requires[0] && getDesserts[1] == requires[1]) isFull++;
+        base.CheckIsFull();
         if (isFull == 1)    // 디저트 다 받았을 때
         {
             GameManager.instance.moneyManager.DropMoney(getDesserts[0], getDesserts[1]);

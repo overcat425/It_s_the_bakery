@@ -4,32 +4,23 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CarScript : MonoBehaviour
+public class CarScript : Consumer
 {
-    public bool isMoving;       // 이동하고 있는지
-    public bool isRequesting;   // 손님이 도착해서 주문하기도 전에 갖다주는 케이스 방지
-    public int isFull;              // 디저트 요구사항 충족
     bool isHorn;
-    public int[] requires; // 0은 도넛요구량, 1은 케이크요구량
-    public int[] getDesserts;   // 받은 도넛/케이크
     public Stack<Transform>[] carStack = new Stack<Transform>[2] { new Stack<Transform>(), new Stack<Transform>() };
-    public Transform[] carBaskets;  // 디저트 오브젝트 받을 위치
-
-    private NavMeshAgent navMesh;
-    void Start()
+    protected override void Start()
     {
-        navMesh = GetComponent<NavMeshAgent>();
+        base.Start();
     }
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        isMoving = true;
-        isFull = 0;
+        base.OnEnable();
         InitTakeOut();
     }
     private void Update()
     {
         isMoving = navMesh.remainingDistance <= 0.05f ? false : true;
-        IsFull();
+        CheckIsFull();
         if(isRequesting && !isHorn)
         {
             isHorn = true;
@@ -44,9 +35,9 @@ public class CarScript : MonoBehaviour
             CarFalse();
         }
     }
-    void IsFull()   // 요구 디저트 충족
+    protected override void CheckIsFull()   // 요구 디저트 충족
     {
-        if (getDesserts[0] == requires[0] && getDesserts[1] == requires[1]) isFull++;
+        base.CheckIsFull();
         if (isFull == 1)
         {
             GameManager.instance.thruMoneyManager.DropMoney(getDesserts[0], getDesserts[1]);

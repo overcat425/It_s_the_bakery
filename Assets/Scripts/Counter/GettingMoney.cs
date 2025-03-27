@@ -54,7 +54,7 @@ public class GettingMoney : MonoBehaviour
             {
                 float above = i == 0 ? 0.08f : 0.13f;
                 Transform dessert = disPlay.disPlayDesserts[i].Pop();
-                dessert.SetParent(customerScript.customerBaskets[i]);
+                dessert.SetParent(customerScript.baskets[i]);
 
                 Vector3 pos = Vector3.up * customerHand.hands[i].Count *above;
                 dessert.DOLocalJump(pos, 1f, 0, 0.3f);
@@ -78,7 +78,7 @@ public class GettingMoney : MonoBehaviour
             {
                 float above = i == 0 ? 0.08f : 0.13f;
                 Transform dessert = disPlay.disPlayDesserts[i].Pop();
-                dessert.SetParent(carScript.carBaskets[i]);
+                dessert.SetParent(carScript.baskets[i]);
 
                 Vector3 pos = Vector3.up * carScript.carStack[i].Count * above;
                 dessert.DOLocalJump(pos, 1f, 0, 0.3f);
